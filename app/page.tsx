@@ -92,9 +92,6 @@ export default function Home() {
                 ))}
               </Input>
               <Input className="col-span-1" label="รหัสประกันสังคม">
-                {registrationNumber.map((number, index) => (
-                  <AutocompleteItem key={index}>{number}</AutocompleteItem>
-                ))}
               </Input>
               <Input className="col-span-2" label="ชื่อสถานประกอบการ" />
               <Autocomplete className="col-span-1" label="ประเภทกิจการ">
@@ -134,7 +131,7 @@ export default function Home() {
                 className="col-span-1"
                 label="จังหวัด"
                 onInputChange={(value) => {
-                  const selectObject = thaiProvinces.find(
+                  const selectObject = thaiProvinces &&  thaiProvinces.find(
                     (item) => item.name_th === value,
                   );
 
@@ -152,11 +149,12 @@ export default function Home() {
                 ))}
               </Autocomplete>
               <Autocomplete
+              isVirtualized
                 className="col-span-1"
                 isDisabled={provinces == null ? true : false}
                 label="อำเภอ"
                 onInputChange={(value) => {
-                  const selectObject = thaiAmphures.find(
+                  const selectObject = thaiAmphures && thaiAmphures.find(
                     (item) => item.name_th == value
                   )
                   onAmphureChange(
@@ -172,13 +170,14 @@ export default function Home() {
                   ))}
               </Autocomplete>
               <Autocomplete
+              isVirtualized
                 className="col-span-1"
                 isDisabled={
                    (!amphures || amphures == '')  ? true : false
                 }
                 onInputChange={(value) => {
 
-                  const selectObject = tambons.find((item:any) => item.name_th == value)
+                  const selectObject = tambons && tambons.find((item:any) => item.name_th == value)
                   onTambonChange(selectObject)
                   
                 }
@@ -213,7 +212,7 @@ export default function Home() {
 
         
         <h1 className="mx-2 mt-3 text-xl col-span-3 text-stone-950">
-          ข้อมูลความต้องการพัฒนาทักษะแรงงาน
+          ข้อมูลความต้องการพัฒนาทักษะแรงงานหรือไม่?
 
         </h1>
         {/* <h1 className="mx-2 mt-3 text-xl col-span-3 text-stone-950">
@@ -226,14 +225,14 @@ export default function Home() {
             <Radio  value="has" className="w-[350px]" >มี </Radio> <Input isDisabled={provideSkills == "dontHas"} label="(ระบุประเภทของการอบรม)"></Input>
 
             
-      <Radio value="dontHas" >ไม่ม่</Radio>
+      <Radio value="dontHas" >ไม่มี</Radio>
 </div>
     
     </RadioGroup>
             </div>
 
             <Button className="text-sky-50 mt-5" color="success">
-              Success
+              ยืนยัน
             </Button>
           </CardBody>
           <CardFooter />
