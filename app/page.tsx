@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RadioGroup, Radio } from "@heroui/radio";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { Divider } from "@heroui/divider";
@@ -18,6 +18,7 @@ import {
   thaiTambons,
   typeOfBusiness,
 } from "@/config/configForm";
+import Questions from "@/components/question";
 export default function Home() {
   const [isAuthen, setIsAuthen] = useState<string>();
   const [provinces, setProvinces] = useState<string>();
@@ -25,6 +26,7 @@ export default function Home() {
   const [tambons, setTambons] = useState<any>();
   const [zipCode,setZipCode] = useState<string>("");
   const [provideSkills,setProvideskills] = useState<string>();
+  const [typeBusiness,setTypeBusiness] = useState<string>();
   const router = useRouter();
 
   // useEffect(() => {
@@ -54,18 +56,21 @@ export default function Home() {
         setTambons([]);
       }
     const selectObject = (value && thaiTambons.filter((item) => item.amphure_id == value.id))
+
     setTambons(selectObject)
   }
   const onTambonChange = (value:any) => {
   
     if(!value){
       setZipCode("")
+
       return;
     }
     value &&  setZipCode(value.zip_code)
    console.log(value)
    
   }
+
   return (
     <>
       <div className="mb-10 flex justify-center">
@@ -79,8 +84,8 @@ export default function Home() {
             ข้อมูลสถานประกอบการ
           </CardHeader>
           <Divider />
-          <CardBody className="text-red-500">
-            <p>
+          <CardBody >
+            <p className="text-red-500">
               *กรอกข้อมูลของท่านด้วยเลขทะเบียนพาณิชย์
               หรือเลขประกันสังคมอย่างใดอย่างหนึ่ง
             </p>
@@ -91,29 +96,30 @@ export default function Home() {
                   <AutocompleteItem key={index}>{number}</AutocompleteItem>
                 ))}
               </Input>
-              <Input className="col-span-1" label="รหัสประกันสังคม">
-              </Input>
-              <Input className="col-span-2" label="ชื่อสถานประกอบการ" />
-              <Autocomplete className="col-span-1" label="ประเภทกิจการ">
+              <Input className="col-span-1" label="รหัสประกันสังคม" />
+              <Input className="col-span-3" label="ชื่อสถานประกอบการ" />
+              <div className="grid grid-cols-6 gap-4 col-span-3">
+              <Autocomplete className="col-span-3" label="ประเภทกิจการ" placeholder="ใส่เลข TSIC" onInputChange={(event)=> {
+                const selectObject = typeOfBusiness.find((item) => item.label == event)
+                setTypeBusiness(selectObject?.TSIC_ID)
+                console.log(typeBusiness)
+              }}>
                 {typeOfBusiness.map((item, index) => (
                   <AutocompleteItem key={index}>{item.label}</AutocompleteItem>
                 ))}
               </Autocomplete>
-              <Autocomplete className="col-span-3" label="กลุ่มประเภทกิจการ">
-                {groupTypeBusiness.map((item, index) => (
-                  <AutocompleteItem key={index}>{item.label}</AutocompleteItem>
-                ))}
-              </Autocomplete>
-
+              <Input className=" col-span-3" label="กลุ่มประเภทกิจการ"  isDisabled={true} value={groupTypeBusiness.find((item) => item.value === typeBusiness)?.label ?? ""}>
+              </Input>
+              </div>
               <div className="col-span-3">
                 <RadioGroup className="w-full" label="ขนาดสถานประกอบการ">
                   <div className="flex flex-row gap-4">
                     <Radio value="buenos-aires">น้อยกว่า 10 คน</Radio>
-                    <Radio value="sydney">10-20 คน</Radio>
+                    <Radio value="sydney">10-19 คน</Radio>
                     <Radio value="san-francisco">20-49 คน</Radio>
                     <Radio value="london">50-99 คน</Radio>
                     <Radio value="tokyo">100-199 คน</Radio>
-                    <Radio value="tokyo1">200 คน</Radio>
+                    <Radio value="tokyo1">200 คนขึ้นไป</Radio>
                   </div>
                 </RadioGroup>
               </div>
@@ -157,6 +163,7 @@ export default function Home() {
                   const selectObject = thaiAmphures && thaiAmphures.find(
                     (item) => item.name_th == value
                   )
+
                   onAmphureChange(
                     (selectObject ? {id: selectObject.id,name : selectObject.name_th} : null) 
                   )
@@ -175,41 +182,38 @@ export default function Home() {
                 isDisabled={
                    (!amphures || amphures == '')  ? true : false
                 }
+                label="ตำบล"
                 onInputChange={(value) => {
 
                   const selectObject = tambons && tambons.find((item:any) => item.name_th == value)
+
                   onTambonChange(selectObject)
                   
                 }
 
                 }
-                label="ตำบล"
               >
                 {tambons && tambons!.map((item:any, index:any) => (
                   <AutocompleteItem key={index}>{item.name_th}</AutocompleteItem>
                 ))}
               </Autocomplete>
-              <Input className="col-span-1" label="รหัสไปรษณีย์" value={zipCode}>
-              </Input>
-              <Input className="col-span-2" label="เบอร์โทรศัพท์" type="number">
-              </Input>
+              <Input className="col-span-1" label="รหัสไปรษณีย์" value={zipCode} />
+              <Input className="col-span-2" label="เบอร์โทรศัพท์" type="number" />
 
               <h1 className="mx-2 text-xl col-span-3 text-stone-950">
           รายละเอียดผู้ตอบแบบสำรวจ
 
         </h1>
-        <Input className="col-span-1" label="ชื่อ">
-        </Input>
-        <Input className="col-span-1" label="นามสกุล">
-        </Input>
-        <Input className="col-span-1" label="เบอร์โทรศัพท์" type="number">
-        </Input>
-        <Input className="col-span-3" label="อีเมล" type="email">
-        </Input>
-        <Input className="col-span-3" label="ตำแหน่ง" >
-        </Input>
+        <Input className="col-span-1" label="ชื่อ" />
+        <Input className="col-span-1" label="นามสกุล" />
+        <Input className="col-span-1" label="เบอร์โทรศัพท์" type="number" />
+        <Input className="col-span-3" label="อีเมล" type="email" />
+        <Input className="col-span-3" label="ตำแหน่ง"  />
 
-
+              <div className="questions col-span-3 mt-3">
+                <h1 className="text-xl">คำถาม</h1>
+                    <Questions></Questions>
+              </div>
         
         <h1 className="mx-2 mt-3 text-xl col-span-3 text-stone-950">
           ข้อมูลความต้องการพัฒนาทักษะแรงงานหรือไม่?
@@ -219,10 +223,10 @@ export default function Home() {
           ปัจจุบันบริษัทขงท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน หรือไม่?
         </h1> */}
       
-        <RadioGroup label="ปัจจุบันบริษัทขงท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน" className="col-span-3"  onValueChange={(value) => setProvideskills(value)} defaultValue="has"> 
+        <RadioGroup className="col-span-3" defaultValue="has"  label="ปัจจุบันบริษัทขงท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน" onValueChange={(value) => setProvideskills(value)}> 
           <div className="flex flex-col gap-3">
       
-            <Radio  value="has" className="w-[350px]" >มี </Radio> <Input isDisabled={provideSkills == "dontHas"} label="(ระบุประเภทของการอบรม)"></Input>
+            <Radio  className="w-[350px]" value="has" >มี </Radio> <Input isDisabled={provideSkills == "dontHas"} label="(ระบุประเภทของการอบรม)" />
 
             
       <Radio value="dontHas" >ไม่มี</Radio>
