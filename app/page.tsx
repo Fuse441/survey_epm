@@ -29,6 +29,7 @@ import { selectCourse } from "@/config/selectCourse";
 import { stateQuestions } from "@/config/stateQuestions";
 import { IForm } from "@/interfaces/form";
 import { Form } from "@heroui/form";
+import { group } from "console";
 
 export default function Home() {
   const [provideSkills,setProvideskills] = useState("")
@@ -148,6 +149,47 @@ export default function Home() {
       });
     }
   };
+
+  const saveData = async () => {
+    const selectObject: any = courses;
+  
+    const resultArray = selectObject.map((dataGroup: any) => {
+      let departmentName = "";
+      const labelList: string[] = [];
+      const softSkillList: string[] = [];
+  
+      Object.entries(dataGroup).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+         
+          departmentName = key;
+          value.forEach((item: any) => {
+            if (item.label) labelList.push(item.label);
+          });
+        } else if (typeof value === "object" && value !== null) {
+          // ถือว่าเป็น softSkill group
+          Object.values(value).forEach((item: any) => {
+            if (item.label) softSkillList.push(item.label);
+          });
+        }
+      });
+  
+      return {
+        department: departmentName,
+        label: labelList,
+        softskill: softSkillList,
+      };
+    });
+  
+    const res = await fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(resultArray),
+    });
+
+    // console.log(resultArray);
+  };
+  
+  
 
   const updateStatus = (key: string | number, value: any) => {
     setStateError((prevState: any) => ({
@@ -276,7 +318,7 @@ export default function Home() {
     return true;
   };
  
-  const itemsPerPage = 1; // หรือกำหนดจำนวนต่อหน้า
+  const itemsPerPage = 1; 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedCourses = courses?.slice(startIndex, endIndex) ?? [];
@@ -813,6 +855,7 @@ export default function Home() {
                           ))}
                       </ModalBody>
                       <ModalFooter>
+                    
                         <Pagination
                           loop
                           showControls
@@ -820,6 +863,9 @@ export default function Home() {
                           total={courses!.length}
                           onChange={setCurrentPage}
                         />
+                            <Button className="mx-3" color="primary" onPress={saveData}>
+                            บันทึกข้อมูล
+                        </Button>
                       </ModalFooter>
                     </>
                   )}
