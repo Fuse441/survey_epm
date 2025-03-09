@@ -1,0 +1,23 @@
+[
+  {
+    "username": "admin",
+    "email": "admin@gmail.com",
+    "password": "@Admin1234",
+    "role": "admin"
+  },
+  {
+    "username": "asd123123aSdasd",
+    "email": "jiranon.khemklad@asasdasddasd.com",
+    "password": "@Aasdasd123"
+  },
+  {
+    "username": "asd",
+    "email": "jiranon.khemklad@gasdasdmail.com",
+    "password": "@Aasdasd123"
+  },
+  {
+    "username": "asdasd",
+    "email": "jiranon.khemklad@gmdddail.comdd",
+    "password": "asd@asda123123asdAA"
+  }
+]

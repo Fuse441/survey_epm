@@ -24,6 +24,7 @@ import {
   HeartFilledIcon,
   SearchIcon,
   Logo,
+  Logout,
 } from "@/components/icons";
 
 export const Navbar = () => {
@@ -67,6 +68,7 @@ export const Navbar = () => {
         <NavbarItem className=" sm:flex gap-2">
          
           <ThemeSwitch />
+          <Link href="/login"   anchorIcon={<Logout />}>Logout</Link>
         </NavbarItem>
        
      
