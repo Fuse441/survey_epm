@@ -7,6 +7,7 @@ import { Divider } from "@heroui/divider";
 import { Accordion, AccordionItem } from "@heroui/accordion";
 
 import { questions } from "@/config/questions";
+import { stateQuestions } from "@/config/stateQuestions";
 type QuestionsProps = {
   selected: { [key: string]: string | string[] };
   setSelected: React.Dispatch<React.SetStateAction<{ [key: string]: string | string[] }>>;
@@ -14,28 +15,36 @@ type QuestionsProps = {
 export default function Questions({ selected, setSelected }: QuestionsProps) {
   
   return (
-    <div>
-
-
+        <Accordion isCompact>
       {questions.map((item, index) => (
-        <div key={index} className="questions">
-          <Accordion>
+   
+        
             <AccordionItem
               key={index}
               aria-label={item.question}
-              title={item.question}
+              title={stateQuestions[index] ? `* ${item.question}`: item.question}
+              
+              subtitle={
+                stateQuestions[index] ? (
+                  <p className="flex">
+                  <span className="text-primary ml-1 text-red-600" >กรุณาเลือกตัวเลือกให้ครบ</span>
+                </p>
+                ) : ("")
+                
+              }
             >
               {item.sub_question.map((sub, id_sub) => {
                 const key = `${index + 1}.${id_sub + 1}`;
 
                 return (
                   <div key={id_sub} className="sub_question m-2 mb-3">
-                    <h2 className="text-lg">{sub.label}</h2>
+                    <h2 className="text-lg" >{sub.label}</h2>
                     {/* <h2 className="text-lg">{`${index + 1}.${id_sub + 1} ${sub.question}`}</h2> */}
                     <h2 className="text-lg ml-4">{`${sub.question}`}</h2>
                     <div className="choices mt-2 ml-5">
                       {sub.type === "radio" && (
                         <RadioGroup
+                        isRequired
                           className=""
                           value={
                             typeof selected[key] === "string"
@@ -109,12 +118,15 @@ export default function Questions({ selected, setSelected }: QuestionsProps) {
                 );
               })}
             </AccordionItem>
-          </Accordion>
-          <Divider />
-        </div>
+          
+       
+      
       ))}
 
-      {/* <pre>{JSON.stringify(selected, null, 2)}</pre> */}
-    </div>
+    
+        </Accordion>
+    
+    
+    
   );
 }
