@@ -1,13 +1,12 @@
-
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Link } from "@heroui/link";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
+
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import {fontMono} from "@/config/fonts"
 import { Navbar } from "@/components/navbar";
 import HideNavbarWrapper from "@/components/hide-nav";
 
@@ -34,20 +33,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html suppressHydrationWarning lang="en">
       <head />
       <body
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-[url('/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed font-sans antialiased",
           fontSans.variable,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          <div className="relative flex flex-col h-screen">
-          
-          <HideNavbarWrapper> 
+          <div className="relative flex flex-col ">
+            <HideNavbarWrapper>
               <Navbar />
             </HideNavbarWrapper>
             <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">

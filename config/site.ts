@@ -3,12 +3,8 @@ export type SiteConfig = typeof siteConfig;
 export const siteConfig = {
   name: "Survey",
   description: "แบบสำรวจความต้องการพัฒนาฝีมือแรงงานของสถานประกอบการ",
-  navItems: [
-   
-  ],
-  navMenuItems: [
-  
-  ],
+  navItems: [],
+  navMenuItems: [],
   links: {
     github: "https://github.com/heroui-inc/heroui",
     twitter: "https://twitter.com/hero_ui",

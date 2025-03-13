@@ -8,6 +8,7 @@ import { emote } from "@/config/emote-svg";
 import { addToast } from "@heroui/toast";
 import { useRouter } from "next/navigation";
 import CryptoJS from 'crypto-js';
+import { Spinner } from "@heroui/spinner";
 export default function LoginPage() {
 
 useEffect(() => {
@@ -16,11 +17,11 @@ useEffect(() => {
  
 }, [])
 
-
+  const [isLoading,setLoading] = React.useState(false)
   const [email, setEmail] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [isLogin, setIsLogin] = React.useState(false);
+  const [isLogin, setIsLogin] = React.useState(true);
   const [isAnimating, setIsAnimating] = React.useState(false);
  const router = useRouter();
   const [state, setState] = React.useState({
@@ -38,7 +39,12 @@ useEffect(() => {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
     },
   });
+  useEffect(() => {
+    localStorage.removeItem("token");
 
+
+   }, [])
+  
   const updateStatus = (key: string | number, value: any) => {
     setState((prevState: any) => ({
       ...prevState,
@@ -53,8 +59,8 @@ useEffect(() => {
       setIsLogin(!isLogin);
       setTimeout(() => {
         setIsAnimating(false);
-      }, 300);
-    }, 300);
+      }, 250);
+    }, 250);
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,6 +69,7 @@ useEffect(() => {
     const data = Object.fromEntries(new FormData(e.currentTarget));
 
     if (state.validateEmail.status && state.validatePassword.status && state.validateUsername && !isLogin) {
+      setLoading(true)
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -72,9 +79,18 @@ useEffect(() => {
       if (res.status == 200) {
         const data = await res.json();
           localStorage.setItem("token",JSON.stringify(data))
-          router.push("/")
+          setIsLogin(true)
+          addToast({
+            title: "สำเร็จ",
+            description: "สมัครสมาชิกสำเร็จ",
+            color: "success",
+            timeout: 3000,
+            shouldShowTimeoutProgress: true,
+          });
+          setLoading(false)
         
       } else if (res.status === 400) {
+        setLoading(false)
         addToast({
           title: "ล้มเหลว",
           description: "ชื่อผู้ใช้ หรือ อีเมลมีผู้ใช้งานแล้ว",
@@ -84,20 +100,26 @@ useEffect(() => {
         });
       }
     }else if(state.validateEmail.status && state.validatePassword.status && isLogin){
+      setLoading(true)
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+   
+
 
       if (res.status == 200) {
         const data = await res.json();
-     
+        
+            
            localStorage.setItem("token",JSON.stringify(data.token))
 
             const decrypt_token = CryptoJS.AES.decrypt(data.token, 'emp').toString(CryptoJS.enc.Utf8);
             if(JSON.parse(decrypt_token).role == "admin"){
                    router.push("/dashboard")
+            setLoading(false)
+
             }else{
                  router.push("/")
             }
@@ -111,6 +133,7 @@ useEffect(() => {
           timeout: 3000,
           shouldShowTimeoutProgress: true,
         });
+        setLoading(false)
       }
     }
   };
@@ -146,6 +169,23 @@ useEffect(() => {
 
   return (
     <div className="w-[600px] flex justify-center items-center">
+      {
+        !isLoading  ? (
+          
+          undefined
+         
+
+        ) : (
+          <>
+     <div className="w-full h-full absolute blur-xl bg-red-50 bg-opacity-50 z-40"></div>
+
+<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+          <Spinner classNames={{label: "text-foreground mt-4"}} label="กำลังเข้าสู่ระบบ" variant="simple" />  
+            
+          </div>
+          </>
+        )
+      }
       <div className="w-full relative">
         <Form onSubmit={onSubmit} className="w-full">
           <Card 
@@ -242,10 +282,10 @@ useEffect(() => {
                   <Button
                     color="primary"
                     variant="light"
-                    onClick={toggleMode}
+                    onPress={toggleMode}
                     type="button"
                   >
-                    {isLogin ? "ยังไม่มีบัญชี? สมัครสมาชิก" : "มีสมาชิกอยู่แล้ว"}
+                    {isLogin ? "สมัครสมาชิก" : "มีสมาชิกอยู่แล้ว"}
                   </Button>
                 </div>
               </div>

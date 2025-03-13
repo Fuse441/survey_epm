@@ -10,6 +10,7 @@ import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { Button } from "@heroui/button";
 import { Pagination } from "@heroui/pagination";
 import React from "react";
+import CryptoJS from 'crypto-js';
 import {
   Modal,
   ModalContent,
@@ -19,6 +20,7 @@ import {
   useDisclosure,
 } from "@heroui/modal";
 import { Chip } from "@heroui/chip";
+import { Form } from "@heroui/form";
 
 import GetProvince from "./../service/province";
 
@@ -28,8 +30,8 @@ import { questions } from "@/config/questions";
 import { selectCourse } from "@/config/selectCourse";
 import { stateQuestions } from "@/config/stateQuestions";
 import { IForm } from "@/interfaces/form";
-import { Form } from "@heroui/form";
-import { group } from "console";
+import { Spinner } from "@heroui/spinner";
+import { type } from './../types/index';
 
 export default function Home() {
   const [provideSkills,setProvideskills] = useState("")
@@ -38,6 +40,7 @@ export default function Home() {
   const [selected, setSelected] = useState<{
     [key: string]: string | string[];
   }>({});
+  const [isLoading,setLoading] = React.useState<boolean>(false)
   const [form, setForm] = useState<IForm>({
     regisNumber: "",
     insuranceCode: "",
@@ -59,20 +62,35 @@ export default function Home() {
       position: "",
     },
   });
-  const [isAuthen, setIsAuthen] = useState<string>();
+  const [isSubmit,setSubmit] = useState<boolean>(false)
+  const [isAuthen, setIsAuthen] = useState<boolean>();
   const router = useRouter();
-
+  
   useEffect(() => {
+   
     if(!localStorage.getItem("token")){
         router.push("/login")
     }
+
+    const data = localStorage.getItem("token")
+    const decrypt_token = CryptoJS.AES.decrypt(JSON.parse(data!), 'emp').toString(CryptoJS.enc.Utf8);
+    if(JSON.parse(decrypt_token).isSend){
     
+      setIsAuthen(true)
+      setShowSuccess(true)
+     
+    }
+   
+  
  
   }, [])
   
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  
   const [courses, setCourse] = useState<any>();
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const [currentPage, setCurrentPage] = React.useState(1);
   const [stateError, setStateError] = useState({
     vaildate_EstablishmentName: {
@@ -135,6 +153,7 @@ export default function Home() {
           return { ...prev, user: { ...prev.user, [name]: value } };
         }
       });
+      
     } else {
       console.log("Custom Change ==> ", input.name, input.value);
 
@@ -151,8 +170,9 @@ export default function Home() {
   };
 
   const saveData = async () => {
+    setLoading(true)
     const selectObject: any = courses;
-  
+    
     const resultArray = selectObject.map((dataGroup: any) => {
       let departmentName = "";
       const labelList: string[] = [];
@@ -186,6 +206,26 @@ export default function Home() {
       body: JSON.stringify(resultArray),
     });
 
+    
+      const data = localStorage.getItem("token")
+          const decrypt_token = CryptoJS.AES.decrypt(JSON.parse(data!), 'emp').toString(CryptoJS.enc.Utf8);
+
+        
+    const update = await fetch("/api/update_user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: decrypt_token,
+    });
+      
+        
+
+    
+   
+    
+    if (res && update) {
+      setLoading(false);
+      setShowSuccess(true)
+    }
     // console.log(resultArray);
   };
   
@@ -205,10 +245,10 @@ export default function Home() {
         deltail: [
           "เทคนิคการสื่อสารในที่ทำงานอย่างมืออาชีพ",
           "Storytelling & Presentation Skills เพื่อการนำเสนอที่น่าสนใจ",
-          "Active Listening & Nonverbal Communication (การฟังอย่างมีประสิทธิภาพ)",
+          "Active Listening & Nonverbal Communication การฟังอย่างมีประสิทธิภาพ",
           "การใช้ภาษากายและน้ำเสียง เพื่อเพิ่มประสิทธิภาพในการนำเสนอ",
           "Collaboration Tools (Microsoft Teams, Slack, Trello) และการทำงานข้ามแผนก",
-          "•	Team Dynamics & Conflict Resolution – การทำงานเป็นทีมและการแก้ไขข้อขัดแย้ง",
+          "Team Dynamics & Conflict Resolution  การทำงานเป็นทีมและการแก้ไขข้อขัดแย้ง",
         ],
         time: "1 Day",
         location: "สถาบันพัฒนาฝีมือแรงงาน / Online Training",
@@ -225,7 +265,7 @@ export default function Home() {
           "Critical Thinking Frameworks (SWOT Analysis, Root Cause Analysis, 5 Whys)",
           "Structured Problem Solving  วิธีการวิเคราะห์ปัญหาอย่างเป็นระบบ",
           "การใช้ Design Thinking เพื่อพัฒนานวัตกรรมในองค์กร",
-          "การคิดสร้างสรรค์และการพัฒนาไอเดียใหม่ ๆ",
+          "การคิดสร้างสรรค์และการพัฒนาไอเดียใหม่ๆ",
           "แนวทางการเป็นผู้นำที่สร้างแรงบันดาลใจ",
           "Emotional Intelligence (EQ) และการบริหารทีมแบบ Agile Leadership",
         ],
@@ -242,10 +282,10 @@ export default function Home() {
         deltail: [
           "เทคนิคการจัดลำดับความสำคัญของงาน (Eisenhower Matrix, Pomodoro Technique)",
           "Digital Tools for Productivity (Google Calendar, Microsoft Outlook, Notion)",
-          "Growth Mindset & Adaptability – การปรับตัวในยุค Digital Transformation",
+          "Growth Mindset & Adaptability  การปรับตัวในยุค Digital Transformation",
           "Stress Management Techniques  เทคนิคจัดการความเครียด และ Work-Life Balance",
-          "Conflict Resolution & Negotiation Skills – วิธีการเจรจาต่อรองแบบ Win-Win",
-          "Emotional Resilience & Mindfulness – การเสริมสร้างความแข็งแกร่งทางอารมณ์",
+          "Conflict Resolution & Negotiation Skills  วิธีการเจรจาต่อรองแบบ Win-Win",
+          "Emotional Resilience & Mindfulness  การเสริมสร้างความแข็งแกร่งทางอารมณ์",
         ],
         time: "1 Day",
         location: "สถาบันพัฒนาฝีมือแรงงาน / Online Training",
@@ -255,51 +295,103 @@ export default function Home() {
   };
 
   const course = () => {
-    console.log("selected ==> ", selected);
-    for (let index = 0; index < 10; index++) {
+    // console.log("selected ==> ", selected);
+
+    for (let index = 0; index < questions.length; index++) {
       const current = index + 1;
       let foundDefined = false;
 
-      for (let jndex = 0; jndex < 10; jndex++) {
+      for (let jndex = 0; jndex < 9; jndex++) {
         const currentJ = jndex + 1;
+        // console.log("====>",currentJ,selected[`${current}.${currentJ}`])
 
         if (selected[`${current}.${currentJ}`] === undefined) {
           foundDefined = true;
           break;
+        }else{
+          foundDefined = false
         }
       }
 
       stateQuestions[index] = foundDefined;
     }
-
-
-    const department = [];
+    console.log(stateQuestions)
     let scheme: any[] = [];
 
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index < questions.length; index++) {
       const question = questions[index].question;
       const current = index + 1;
 
       let obj = {};
-
+    
       if (
-        selected[`${current}.1`] != "น้อย" &&
-        selected[`${current}.3`] != "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้" &&
-        selected[`${current}.4`] != "น้อย"
+        selected[`${current}.1`] == "มาก" &&
+        selected[`${current}.3`] != "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"
       ) {
+        const mappedItems = (selectCourse[question] || []).map((item: any) => {
+          // ถ้ายังไม่ได้เลือก ให้แนะนำ
+          if (!selected[`${current}.3`].includes(item.match)) {
+            return { ...item, recommend: true };
+          }
+          return item;
+        });
+        
+        // จัดเรียง: ไม่มี recommend อยู่ข้างหน้า
+        const sortedItems = mappedItems.sort((a: any, b: any) => {
+          if (a.recommend && !b.recommend) return 1;  // ถ้ามี recommend มาไว้หลัง
+          if (!a.recommend && b.recommend) return -1; // ถ้าไม่มี recommend ให้ไปข้างหน้า
+          return 0;  // ถ้าทั้งคู่มีหรือไม่มี recommend อยู่แล้วก็ไม่เปลี่ยนแปลง
+        });
+        
         const obj = {
-          [question]: selectCourse[question] || {},
+          [question]: sortedItems,
           softSkill: selectSoftSkill,
         };
-
+        
         scheme.push(obj);
-      } else if (
+        
+      }
+      
+    
+      else if(selected[`${current}.1`] == "ปานกลาง" && selected[`${current}.3`] == "ไม่ทราบทักษะที่ควรพัฒนา" ){
+        const result = selectCourse[question].filter((item: any) =>
+          selected[`${current}.3`].includes(item.match)
+        );
+        
+        const unselectedItems = selectCourse[question].filter(
+          (item: any) => !selected[`${current}.3`].includes(item.match)
+        );
+        
+        let finalItems = [...result];
+        
+        if (result.length === 1 && unselectedItems.length > 0) {
+          const recommendItem = { ...unselectedItems[0], recommend: true };
+          finalItems.push(recommendItem); // ใส่ recommend ไว้ท้ายก่อน แล้วค่อย sort
+        }
+        
+        // 🔥 จัดเรียง: recommend=false อยู่ด้านหน้า
+        finalItems.sort((a, b) => {
+          if (a.recommend && !b.recommend) return 1;
+          if (!a.recommend && b.recommend) return -1;
+          return 0;
+        });
+        
+        const obj = {
+          [question]: finalItems,
+          softSkill: selectSoftSkill,
+        };
+        
+        scheme.push(obj);
+        
+        }          
+       else if (
         selected[`${current}.1`] == "น้อย" &&
-        selected[`${current}.3`] == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"
+        selected[`${current}.3`] != "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"
       ) {
         const result = selectCourse[question].filter((item: any) =>
           selected[`${current}.3`].includes(item.match)
         );
+        console.log("case 4 ==> " ,result)
         let clone: any = selectCourse[question];
 
         clone &&= [];
@@ -309,13 +401,31 @@ export default function Home() {
           [question]: clone || {},
           softSkill: selectSoftSkill,
         };
+        
+        // console.log("obj  2 ==> ", obj);
+        scheme.push(obj);
+      }else{
+         let clone: any = selectCourse[question];
+        
+        
 
+        const obj = {
+          [question]: {},
+          softSkill: selectSoftSkill,
+        };
+        
+        // console.log("obj 3 ==> ", obj);
         scheme.push(obj);
       }
     }
-    setCourse(scheme);
+    console.log("scheme ==> ", scheme);
 
-    return true;
+    setCourse(scheme);
+    const filter = stateQuestions.filter((item) => item == true)
+    const result = filter.length > 0 ? false : true
+
+
+  return result && isSubmit;
   };
  
   const itemsPerPage = 1; 
@@ -326,7 +436,10 @@ export default function Home() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.currentTarget));
-
+    const sm  = Object.values(data).filter((item) => item == '');
+    // console.log("sm ==> ", sm);
+    setSubmit(sm.length > 0 ? false : true)
+    // console.log(isSubmit)
     const validationErrors = {
       vaildate_EstablishmentName: !form.establishmentName,
       vaildate_Branch: !form.branch,
@@ -343,22 +456,84 @@ export default function Home() {
       vaildate_Email: !form.user.email,
       vaildate_Position: !form.user.position,
     };
-
+    console.log(!form.user.firstName)
     Object.entries(validationErrors).forEach(([key, value]) => {
-      if (value) updateStatus(key, true);
+    
+      if (value == true) { 
+      
+        updateStatus(key, true)
+      }else{
+      
+        updateStatus(key, false)
+      }
     });
+    // console.log("set variable",stateError)
+        
   };
 
   return (
     <>
-      <Form className="w-full" validationErrors={errors} onSubmit={onSubmit}>
+    <div>
+    {showSuccess ? (
+  <Modal isOpen={true} onOpenChange={() => setShowSuccess(false)} hideCloseButton={true}>
+    <ModalContent>
+      {(onClose) => (
+        <>
+          <ModalHeader className="flex flex-col gap-1">ขอบคุณที่สมัคร!</ModalHeader>
+          <ModalBody>
+            <p>
+              {
+                isAuthen ? "ขอบคุณที่เข้ามาใช้งานเว็บไซต์ของเรา แต่เนื่องจากคุณได้กรอกข้อมูลเรียบร้อยแล้วและเราได้รับข้อมูลของคุณแล้ว" : `ขอบคุณที่สมัครและกรอกข้อมูลเรียบร้อยแล้ว! เราได้รับข้อมูลของคุณแล้วและขอแจ้งให้ทราบว่า
+              หลังจากนี้คุณจะไม่สามารถเข้ามาในเว็บนี้ได้อีก เนื่องจากคุณได้ทำการสมัครเสร็จสิ้นแล้ว`
+              }
+             
+            </p>
+            <p>
+              หากคุณมีข้อสงสัยหรือคำถามเพิ่มเติมเกี่ยวกับการสมัครหรือลงทะเบียน,
+              โปรดติดต่อทีมงานของเราเพื่อขอความช่วยเหลือ
+            </p>
+          </ModalBody>
+          <ModalFooter>
+          
+            <Button color="primary" onPress={() => {
+              onClose();
+              router.push("/login"); // หรือสามารถเปลี่ยนเส้นทางที่อื่นได้
+            }}>
+              ไปที่หน้าเข้าสู่ระบบ
+            </Button>
+          </ModalFooter>
+        </>
+      )}
+    </ModalContent>
+  </Modal>
+) : null}
+
+
+    </div>
+      <Form className="w-full " validationErrors={errors} onSubmit={onSubmit}>
+      {
+        !isLoading  ? (
+          
+          null
+         
+
+        ) : (
+          <>
+      <div className="fixed inset-0 blur-xl bg-red-50 bg-opacity-50 z-40"></div>
+
+<div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+  <Spinner classNames={{ label: "text-foreground mt-4" }} label="กำลังเข้าสู่ระบบ" variant="simple" />
+</div>
+          </>
+        )
+      }
         <div className="mb-10 flex justify-center">
           <h1 className="text-3xl">
             แบบสำรวจความต้องการพัฒนาฝีมือแรงงานของสถานประกอบการ
           </h1>
         </div>
-        <section className="flex flex-col items-center justify-center gap-4 w-full">
-          <Card className="w-full">
+        <section className="flex flex-col items-center justify-center gap-4 w-full ">
+          <Card className="w-full ">
             <CardHeader className="flex gap-3 text-xl ">
               ข้อมูลสถานประกอบการ
             </CardHeader>
@@ -371,20 +546,23 @@ export default function Home() {
               <div className="mt-5 grid grid-cols-3 gap-4 w-full">
                 <div className="col-span-3 grid grid-cols-6 gap-4">
                   <Input
-                    name="regisNumber"
+           
                     isDisabled={form.insuranceCode ? true : false}
+                    name="regisNumber"
                     placeholder="กรอกเลขทะเบียนพาณิชย์"
                     value={form.regisNumber}
                     onChange={handleChange}
+                    type="number"
                     className="col-span-3"
                     // isDisabled={}
                     label="เลขทะเบียนพาณิชย์"
                   />
                   <Input
-                    isDisabled={form.regisNumber ? true : false}
                     className="col-span-3"
+                    isDisabled={form.regisNumber ? true : false}
                     label="รหัสประกันสังคม"
                     name="insuranceCode"
+                    type="number"
                     placeholder="กรอกรหัสประกันสังคม"
                     value={form.insuranceCode}
                     onChange={handleChange}
@@ -490,14 +668,14 @@ export default function Home() {
                   />
                 </div>
                 <Autocomplete
+                  isRequired
                   isVirtualized
                   className="col-span-1"
-                  label="จังหวัด"
-                  isRequired
                   errorMessage={"กรุณาเลือกจังหวัด"}
                   isInvalid={
                     !form.user.province && stateError.vaildate_Province.status
                   }
+                  label="จังหวัด"
                   name="province"
                   placeholder="เลือกจังหวัด"
                   onInputChange={(event) => {
@@ -511,14 +689,14 @@ export default function Home() {
                   ))}
                 </Autocomplete>
                 <Autocomplete
-                  isVirtualized
                   isRequired
+                  isVirtualized
                   className="col-span-1"
-                  label="อำเภอ"
                   errorMessage={"กรุณาเลือกอำเภอ"}
                   isInvalid={
                     !form.user.district && stateError.vaildate_District.status
                   }
+                  label="อำเภอ"
                   placeholder="เลือกอำเภอ"
                   value={form.user.district}
                   onInputChange={(event) => {
@@ -537,13 +715,13 @@ export default function Home() {
                   isRequired
                   isVirtualized
                   className="col-span-1"
-                  label="ตำบล"
-                  placeholder="เลือกตำบล"
                   errorMessage={"กรุณาเลือกตำบล"}
                   isInvalid={
                     !form.user.subdistrict &&
                     stateError.vaildate_SubDistrict.status
                   }
+                  label="ตำบล"
+                  placeholder="เลือกตำบล"
                   value={form.user.subdistrict}
                   onInputChange={(event) => {
                     handleChange({ name: "subdistrict", value: event });
@@ -565,13 +743,13 @@ export default function Home() {
                 <Input
                   isRequired
                   className="col-span-3"
-                  label="รหัสไปรษณีย์"
-                  type="number"
-                  placeholder="กรอกรหัสไปรษณีย์"
                   errorMessage={"กรุณากรอกรหัสไปรษณีย์"}
                   isInvalid={
                     !form.user.zipCode && stateError.vaildate_ZipCode.status
                   }
+                  label="รหัสไปรษณีย์"
+                  placeholder="กรอกรหัสไปรษณีย์"
+                  type="number"
                   value={form.user.zipCode}
                   onChange={(event) => {
                     handleChange({ name: "zipCode", value:  event.target.value });
@@ -598,31 +776,31 @@ export default function Home() {
                 </h1>
                 <Input
                   isRequired
+                  className="col-span-1"
                   errorMessage={"กรุณากรอกชื่อ"}
                   isInvalid={
                     !form.user.firstName && stateError.vaildate_FirstName.status
                   }
+                  label="ชื่อ"
+                  placeholder="กรอกชื่อ"
                   value={form.user.firstName}
                   onChange={(event) => {
                     handleChange({ name: "firstName", value: event.target.value });
                   }}
-                  className="col-span-1"
-                  label="ชื่อ"
-                  placeholder="กรอกชื่อ"
                 />
                 <Input
                   isRequired
                   className="col-span-1"
                   errorMessage={"กรุณากรอกนามสกุล"}
-                  onChange={(event) => {
-                    handleChange({ name: "lastName", value: event.target.value });
-                  }}
-                  value={form.user.lastName}
                   isInvalid={
                     !form.user.lastName && stateError.vaildate_LastName.status
                   }
                   label="นามสกุล"
                   placeholder="กรอกนามสกุล"
+                  value={form.user.lastName}
+                  onChange={(event) => {
+                    handleChange({ name: "lastName", value: event.target.value });
+                  }}
                 />
                 <Input
                   isRequired
@@ -633,12 +811,12 @@ export default function Home() {
                     stateError.vaildate_PhoneNumber.status
                   }
                   label="เบอร์โทรศัพท์"
+                  placeholder="กรอกเบอร์โทรศัพท์"
+                  type="number"
+                  value={form.user.phoneNumber}
                   onChange={(event) => {
                     handleChange({ name: "phoneNumber", value: event.target.value });
                   }}
-                  value={form.user.phoneNumber}
-                  placeholder="กรอกเบอร์โทรศัพท์"
-                  type="number"
                 />
                 <Input
                   isRequired
@@ -647,27 +825,27 @@ export default function Home() {
                   isInvalid={
                     !form.user.email && stateError.vaildate_Email.status
                   }
-                  onChange={(event) => {
-                    handleChange({ name: "email", value: event.target.value });
-                  }}
-                  value={form.user.email}
                   label="อีเมล"
                   placeholder="กรอกอีเมล"
                   type="email"
+                  value={form.user.email}
+                  onChange={(event) => {
+                    handleChange({ name: "email", value: event.target.value });
+                  }}
                 />
                 <Input
                   isRequired
                   className="col-span-3"
-                  label="ตำแหน่ง"
                   errorMessage={"กรุณากรอกกรอกตำแหน่ง"}
                   isInvalid={
                     !form.user.position && stateError.vaildate_Position.status
                   }
+                  label="ตำแหน่ง"
+                  placeholder="กรอกตำแหน่ง"
+                  value={form.user.position}
                   onChange={(event) => {
                     handleChange({ name: "position", value: event.target.value });
                   }}
-                  value={form.user.position}
-                  placeholder="กรอกตำแหน่ง"
                 />
                 <div className="questions col-span-3 mt-3">
                   <h1 className="text-xl">แบบสอบถาม</h1>
@@ -752,7 +930,7 @@ export default function Home() {
 
                                     {isEmptyArray || isEmptyObject ? (
                                       <p className="text-gray-500 my-4">
-                                        ไม่พบหลักสูตร
+                                        ไม่พบหลักสูตรที่แนะนำ
                                       </p>
                                     ) : Array.isArray(categoryData) ? (
                                       // 🔸 วนลูป Array ของหลักสูตร
@@ -793,6 +971,12 @@ export default function Home() {
                                                 <Chip color="primary">
                                                   {course.time}
                                                 </Chip>
+                                                  {course.recommend ? (
+                                                     <Chip color="secondary" className="">
+                                                      หลักสูตรแนะนำ
+                                                </Chip>
+
+                                                  ) : ""}
                                               </div>
                                             </CardBody>
                                           </Card>
@@ -863,7 +1047,10 @@ export default function Home() {
                           total={courses!.length}
                           onChange={setCurrentPage}
                         />
-                            <Button className="mx-3" color="primary" onPress={saveData}>
+                            <Button className="mx-3" color="primary" onPress={() => {
+                              onClose()
+                              saveData()
+                            }}>
                             บันทึกข้อมูล
                         </Button>
                       </ModalFooter>
@@ -876,6 +1063,6 @@ export default function Home() {
           </Card>
         </section>
       </Form>
-    </>
+          </>
   );
 }

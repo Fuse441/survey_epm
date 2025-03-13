@@ -31,7 +31,7 @@ export const emote = {
       />
     </svg>
   ),
-  password : (
+  password: (
     <svg
       aria-hidden="true"
       fill="none"
@@ -46,5 +46,5 @@ export const emote = {
         fill="currentColor"
       />
     </svg>
-  )
+  ),
 };

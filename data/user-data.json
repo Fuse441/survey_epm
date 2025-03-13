@@ -6,149 +6,15 @@
     "role": "admin"
   },
   {
-    "username": "asd123123aSdasd",
-    "email": "jiranon.khemklad@asasdasddasd.com",
-    "password": "@Aasdasd123"
+    "username": "test1",
+    "email": "test111@gmail.com",
+    "password": "@Fuse27271144",
+    "isSend": true
   },
   {
-    "username": "asd",
-    "email": "jiranon.khemklad@gasdasdmail.com",
-    "password": "@Aasdasd123"
-  },
-  {
-    "username": "asdasd",
-    "email": "jiranon.khemklad@gmdddail.comdd",
-    "password": "asd@asda123123asdAA"
-  },
-  [
-    {
-      "department": "IT Infrastructure Services (ฝ่ายบริหารโครงสร้างด้านเทคโนโลยีสารสนเทศ)",
-      "label": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Cybersecurity & Ethical Hacking",
-        "หลักสูตร IT Infrastructure & Cloud Management"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    },
-    {
-      "department": "Software Enterprise Services (ฝ่ายบริการซอฟต์แวร์ธุรกิจองค์กร)",
-      "label": [
-        "Software Enterprise Services (ฝ่ายบริการซอฟต์แวร์ธุรกิจองค์กร) หลักสูตรพื้นฐาน Introduction to ERP Systems (SAP, Oracle, Microsoft Dynamics)",
-        "หลักสูตร SQL & NoSQL Database Management",
-        "หลักสูตร Data Analytics & Business Intelligence (Power BI, Tableau)"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    },
-    {
-      "department": "IT Services (ฝ่ายบริการเทคโนโลยีสารสนเทศ)",
-      "label": [
-        "หลักสูตรพื้นฐาน IT Support & Helpdesk Essentials",
-        "หลักสูตร Endpoint Security & Data Protection",
-        "หลักสูตร ITIL & IT Service Management"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    },
-    {
-      "department": "Solutions Development (ฝ่ายพัฒนาดิจิทัลโซลูชั่นส์)",
-      "label": [
-        "หลักสูตรพื้นฐาน Full-Stack Web Development (React, Node.js, Python)",
-        "หลักสูตร DevOps & CI/CD with Docker & Kubernetes",
-        "หลักสูตร AI & Machine Learning Development"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    },
-    {
-      "department": "Accounting & Finance (งานบัญชีและการเงิน)",
-      "label": [
-        "หลักสูตรพื้นฐาน Digital Accounting & Excel for Financial Analysis",
-        "หลักสูตร Regulatory Compliance & Taxation",
-        "หลักสูตร Financial Data Analytics"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    },
-    {
-      "department": "Human Resource (ฝ่ายทรัพยากรบุคคล)",
-      "label": [
-        "หลักสูตร HR Digital Transformation & HRIS",
-        "หลักสูตร Payroll & Benefits Management",
-        "หลักสูตร HR Analytics & People Data Science"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    },
-    {
-      "department": "Administration (ฝ่ายธุรการ)",
-      "label": [
-        "หลักสูตรพื้นฐาน Office Management & Digital Document Handling",
-        "หลักสูตร E-Document & Workflow Automation",
-        "หลักสูตร Project Coordination Tools (Trello, Asana, Notion)"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    },
-    {
-      "department": "Procurement (ฝ่ายจัดซื้อ)",
-      "label": [
-        "หลักสูตร Procurement & Supply Chain Fundamentals",
-        "หลักสูตร E-Procurement & Digital Supply Chain Analytics",
-        "หลักสูตร Sustainable Procurement & ESG Compliance"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    },
-    {
-      "department": "Project Management (ฝ่ายบริหารงานโครงการ)",
-      "label": [
-        "หลักสูตร Project Management Essentials (Waterfall, Agile, Scrum)",
-        "หลักสูตร Project Financial Management"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    },
-    {
-      "department": "Sales (ฝ่ายขาย)",
-      "label": [
-        "หลักสูตร Using CRM Tools (Salesforce, HubSpot)",
-        "หลักสูตร B2B Sales & Solution Selling",
-        "หลักสูตร Data-Driven Sales & AI in Marketing"
-      ],
-      "softskill": [
-        "หลักสูตร Network Design & Administration",
-        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
-      ]
-    }
-  ]
+    "username": "test01",
+    "email": "test1@gmail.com",
+    "password": "@Test1234",
+    "isSend": true
+  }
 ]
