@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       } else {
       }
     } catch (err) {
-      console.error("Error parsing existing JSON:", err);
+      // console.error("Error parsing existing JSON:", err);
     }
   }
 

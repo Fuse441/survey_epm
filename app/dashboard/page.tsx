@@ -160,7 +160,7 @@ export default function DashBoardPage() {
                 Top 5 Courses to Learn
               </p>
               <small className="text-default-500" />
-              <h4 className="font-bold text-large" />
+         
             </CardHeader>
             <CardBody className="overflow-visible py-2 px-5">
               <div className="flex flex-col">

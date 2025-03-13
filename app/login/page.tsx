@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
@@ -7,23 +7,20 @@ import { Form } from "@heroui/form";
 import { emote } from "@/config/emote-svg";
 import { addToast } from "@heroui/toast";
 import { useRouter } from "next/navigation";
-import CryptoJS from 'crypto-js';
+import CryptoJS from "crypto-js";
 import { Spinner } from "@heroui/spinner";
 export default function LoginPage() {
+  useEffect(() => {
+    localStorage.removeItem("token");
+  }, []);
 
-useEffect(() => {
-  localStorage.removeItem("token")
-
- 
-}, [])
-
-  const [isLoading,setLoading] = React.useState(false)
+  const [isLoading, setLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLogin, setIsLogin] = React.useState(true);
   const [isAnimating, setIsAnimating] = React.useState(false);
- const router = useRouter();
+  const router = useRouter();
   const [state, setState] = React.useState({
     validateEmail: {
       status: false,
@@ -41,10 +38,8 @@ useEffect(() => {
   });
   useEffect(() => {
     localStorage.removeItem("token");
+  }, []);
 
-
-   }, [])
-  
   const updateStatus = (key: string | number, value: any) => {
     setState((prevState: any) => ({
       ...prevState,
@@ -54,7 +49,7 @@ useEffect(() => {
 
   const toggleMode = () => {
     setIsAnimating(true);
-    
+
     setTimeout(() => {
       setIsLogin(!isLogin);
       setTimeout(() => {
@@ -68,8 +63,13 @@ useEffect(() => {
 
     const data = Object.fromEntries(new FormData(e.currentTarget));
 
-    if (state.validateEmail.status && state.validatePassword.status && state.validateUsername && !isLogin) {
-      setLoading(true)
+    if (
+      state.validateEmail.status &&
+      state.validatePassword.status &&
+      state.validateUsername &&
+      !isLogin
+    ) {
+      setLoading(true);
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -78,19 +78,18 @@ useEffect(() => {
 
       if (res.status == 200) {
         const data = await res.json();
-          localStorage.setItem("token",JSON.stringify(data))
-          setIsLogin(true)
-          addToast({
-            title: "สำเร็จ",
-            description: "สมัครสมาชิกสำเร็จ",
-            color: "success",
-            timeout: 3000,
-            shouldShowTimeoutProgress: true,
-          });
-          setLoading(false)
-        
+        localStorage.setItem("token", JSON.stringify(data));
+        setIsLogin(true);
+        addToast({
+          title: "สำเร็จ",
+          description: "สมัครสมาชิกสำเร็จ",
+          color: "success",
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        });
+        setLoading(false);
       } else if (res.status === 400) {
-        setLoading(false)
+        setLoading(false);
         addToast({
           title: "ล้มเหลว",
           description: "ชื่อผู้ใช้ หรือ อีเมลมีผู้ใช้งานแล้ว",
@@ -99,32 +98,33 @@ useEffect(() => {
           shouldShowTimeoutProgress: true,
         });
       }
-    }else if(state.validateEmail.status && state.validatePassword.status && isLogin){
-      setLoading(true)
+    } else if (
+      state.validateEmail.status &&
+      state.validatePassword.status &&
+      isLogin
+    ) {
+      setLoading(true);
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-   
-
 
       if (res.status == 200) {
         const data = await res.json();
-        
-            
-           localStorage.setItem("token",JSON.stringify(data.token))
 
-            const decrypt_token = CryptoJS.AES.decrypt(data.token, 'emp').toString(CryptoJS.enc.Utf8);
-            if(JSON.parse(decrypt_token).role == "admin"){
-                   router.push("/dashboard")
-            setLoading(false)
+        localStorage.setItem("token", JSON.stringify(data.token));
 
-            }else{
-                 router.push("/")
-            }
-          // router.push("/")
-        
+        const decrypt_token = CryptoJS.AES.decrypt(data.token, "emp").toString(
+          CryptoJS.enc.Utf8
+        );
+        if (JSON.parse(decrypt_token).role == "admin") {
+          router.push("/dashboard");
+          setLoading(false);
+        } else {
+          router.push("/");
+        }
+        // router.push("/")
       } else if (res.status === 400) {
         addToast({
           title: "ล้มเหลว",
@@ -133,14 +133,14 @@ useEffect(() => {
           timeout: 3000,
           shouldShowTimeoutProgress: true,
         });
-        setLoading(false)
+        setLoading(false);
       }
     }
   };
 
   // Define CSS for card swap animation
   React.useEffect(() => {
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.innerHTML = `
       .slide-out {
         animation: slideOut 0.3s ease-in-out forwards;
@@ -169,28 +169,24 @@ useEffect(() => {
 
   return (
     <div className="w-[600px] flex justify-center items-center">
-      {
-        !isLoading  ? (
-          
-          undefined
-         
+      {!isLoading ? undefined : (
+        <>
+          <div className="w-full h-full absolute blur-xl bg-red-50 bg-opacity-50 z-40"></div>
 
-        ) : (
-          <>
-     <div className="w-full h-full absolute blur-xl bg-red-50 bg-opacity-50 z-40"></div>
-
-<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-          <Spinner classNames={{label: "text-foreground mt-4"}} label="กำลังเข้าสู่ระบบ" variant="simple" />  
-            
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+            <Spinner
+              classNames={{ label: "text-foreground mt-4" }}
+              label="กำลังเข้าสู่ระบบ"
+              variant="simple"
+            />
           </div>
-          </>
-        )
-      }
+        </>
+      )}
       <div className="w-full relative">
         <Form onSubmit={onSubmit} className="w-full">
-          <Card 
+          <Card
             className={`rounded-none rounded-l-lg p-2 w-full 
-              ${isAnimating ? 'slide-out' : 'slide-in'}`}
+              ${isAnimating ? "slide-out" : "slide-in"}`}
           >
             <CardHeader className="border-b pb-4">
               <h2 className="text-xl font-bold">
@@ -200,15 +196,17 @@ useEffect(() => {
             <CardBody className="py-6">
               <div className="space-y-10">
                 {/* Username field with transition */}
-                <div 
+                <div
                   className={`transition-all duration-300 
-                    ${!isLogin ? ' opacity-100' : ' opacity-0'}`}
+                    ${!isLogin ? " opacity-100" : " opacity-0"}`}
                 >
                   {!isLogin && (
                     <Input
                       isRequired
                       errorMessage="ต้องเป็นตัวอักษร (a-z) และตัวเลข (0-9) เท่านั้น"
-                      isInvalid={!state.validateUsername.status && username !== ""}
+                      isInvalid={
+                        !state.validateUsername.status && username !== ""
+                      }
                       label="Username"
                       startContent={emote.username}
                       labelPlacement="outside"
@@ -237,9 +235,8 @@ useEffect(() => {
                   labelPlacement="outside"
                   name="email"
                   value={email}
-                     className="my-5"
+                  className="my-5"
                   placeholder="กรอกอีเมลของคุณ"
-                    
                   onValueChange={(value) => {
                     setEmail(value);
                     updateStatus(
@@ -272,11 +269,7 @@ useEffect(() => {
                 />
 
                 <div className="pt-4 flex flex-col sm:flex-row gap-2">
-                  <Button 
-                    className="shadow-md"
-                    color="primary" 
-                    type="submit"
-                  >
+                  <Button className="shadow-md" color="primary" type="submit">
                     {isLogin ? "เข้าสู่ระบบ" : "สมัครสมาชิก"}
                   </Button>
                   <Button
