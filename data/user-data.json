@@ -16,5 +16,10 @@
     "email": "test1@gmail.com",
     "password": "@Test1234",
     "isSend": true
+  },
+  {
+    "username": "test02",
+    "email": "test02@gmail.com",
+    "password": "@Test1234"
   }
 ]

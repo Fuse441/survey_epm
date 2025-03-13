@@ -77,7 +77,7 @@ export default function Questions({ selected, setSelected }: QuestionsProps) {
                             item == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้",
                         );
 
-                        console.log(selectedValue);
+                        
                         if (selectedValue) {
                           setSelected((prev) => ({
                             ...prev,

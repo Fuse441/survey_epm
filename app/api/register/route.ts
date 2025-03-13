@@ -6,7 +6,7 @@ import CryptoJS from "crypto-js";
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  console.log("Request body:", body);
+  
 
   const filePath = path.join(process.cwd(), "data", "user-data.json");
 

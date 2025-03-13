@@ -58,7 +58,7 @@ export default function DashBoardPage() {
       setResult(result || []);
       const sort = topLearn(result);
 
-      console.log("sort ==> ", sort);
+      
       setTop(sort);
     };
 

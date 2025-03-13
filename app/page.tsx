@@ -144,7 +144,7 @@ export default function Home() {
       // เมื่อ event มาจาก input element
       const { name, value } = input.target;
 
-      console.log("Event from Input ==> ", name, value);
+      
 
       setForm((prev) => {
         if (prev.hasOwnProperty(name)) {
@@ -155,11 +155,11 @@ export default function Home() {
       });
       
     } else {
-      console.log("Custom Change ==> ", input.name, input.value);
+      
 
       setForm((prev) => {
         if (prev.hasOwnProperty(input.name)) {
-          console.log("hasOwnProperty");
+          
 
           return { ...prev, [input.name]: input.value };
         } else {
@@ -226,7 +226,7 @@ export default function Home() {
       setLoading(false);
       setShowSuccess(true)
     }
-    // console.log(resultArray);
+    // 
   };
   
   
@@ -295,7 +295,7 @@ export default function Home() {
   };
 
   const course = () => {
-    // console.log("selected ==> ", selected);
+    // 
 
     for (let index = 0; index < questions.length; index++) {
       const current = index + 1;
@@ -303,7 +303,7 @@ export default function Home() {
 
       for (let jndex = 0; jndex < 9; jndex++) {
         const currentJ = jndex + 1;
-        // console.log("====>",currentJ,selected[`${current}.${currentJ}`])
+        // 
 
         if (selected[`${current}.${currentJ}`] === undefined) {
           foundDefined = true;
@@ -315,7 +315,7 @@ export default function Home() {
 
       stateQuestions[index] = foundDefined;
     }
-    console.log(stateQuestions)
+    
     let scheme: any[] = [];
 
     for (let index = 0; index < questions.length; index++) {
@@ -391,7 +391,7 @@ export default function Home() {
         const result = selectCourse[question].filter((item: any) =>
           selected[`${current}.3`].includes(item.match)
         );
-        console.log("case 4 ==> " ,result)
+        
         let clone: any = selectCourse[question];
 
         clone &&= [];
@@ -402,7 +402,7 @@ export default function Home() {
           softSkill: selectSoftSkill,
         };
         
-        // console.log("obj  2 ==> ", obj);
+        // 
         scheme.push(obj);
       }else{
          let clone: any = selectCourse[question];
@@ -414,11 +414,11 @@ export default function Home() {
           softSkill: selectSoftSkill,
         };
         
-        // console.log("obj 3 ==> ", obj);
+        // 
         scheme.push(obj);
       }
     }
-    console.log("scheme ==> ", scheme);
+    
 
     setCourse(scheme);
     const filter = stateQuestions.filter((item) => item == true)
@@ -437,9 +437,9 @@ export default function Home() {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.currentTarget));
     const sm  = Object.values(data).filter((item) => item == '');
-    // console.log("sm ==> ", sm);
+    // 
     setSubmit(sm.length > 0 ? false : true)
-    // console.log(isSubmit)
+    // 
     const validationErrors = {
       vaildate_EstablishmentName: !form.establishmentName,
       vaildate_Branch: !form.branch,
@@ -456,7 +456,7 @@ export default function Home() {
       vaildate_Email: !form.user.email,
       vaildate_Position: !form.user.position,
     };
-    console.log(!form.user.firstName)
+    
     Object.entries(validationErrors).forEach(([key, value]) => {
     
       if (value == true) { 
@@ -467,7 +467,7 @@ export default function Home() {
         updateStatus(key, false)
       }
     });
-    // console.log("set variable",stateError)
+    // 
         
   };
 

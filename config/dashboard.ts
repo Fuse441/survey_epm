@@ -22,7 +22,7 @@ export const topLearn = (response: any) => {
   if (response) {
     const object = response && JSON.parse(response.data);
 
-    console.log("object ==> ", object);
+    
 
     object.forEach((array: any) => {
       array.forEach((element: any) => {
@@ -69,7 +69,7 @@ export const radar = (response: any) => {
   if (response) {
     const object = response && JSON.parse(response.data);
 
-    console.log("object ==> ", object);
+    
 
     object.forEach((array: any) => {
       array.forEach((element: any) => {
@@ -84,7 +84,7 @@ export const radar = (response: any) => {
     });
   }
 
-  console.log("department (raw count) ==> ", department);
+  
 
   const total = Object.values(department).reduce((sum, val) => sum + val, 0);
 
