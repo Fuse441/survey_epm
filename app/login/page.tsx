@@ -134,6 +134,15 @@ export default function LoginPage() {
           shouldShowTimeoutProgress: true,
         });
         setLoading(false);
+      }else {
+        addToast({
+          title: "ล้มเหลว",
+          description: "เซิฟเวอร์มีปัญหา",
+          color: "danger",
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        });
+        setLoading(false);
       }
     }
   };
