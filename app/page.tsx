@@ -31,7 +31,6 @@ import { selectCourse } from "@/config/selectCourse";
 import { stateQuestions } from "@/config/stateQuestions";
 import { IForm } from "@/interfaces/form";
 import { Spinner } from "@heroui/spinner";
-import { type } from './../types/index';
 
 export default function Home() {
   const [provideSkills,setProvideskills] = useState("")
