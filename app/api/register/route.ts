@@ -5,10 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 import CryptoJS from "crypto-js";
 export async function POST(req: NextRequest) {
   const body = await req.json();
+  
+  
+  const filePath =  path.join("../../","data/user-data.json");
 
-  console.log("Request body:", body);
-
-  const filePath = path.join(process.cwd(), "data", "user-data.json");
+  // const filePath = path.join(process.cwd(), "data", "user-data.json");
 
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
 
