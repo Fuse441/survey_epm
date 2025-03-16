@@ -6,6 +6,7 @@ import { Accordion, AccordionItem } from "@heroui/accordion";
 
 import { questions } from "@/config/questions";
 import { stateQuestions } from "@/config/stateQuestions";
+import { exclusiveOptions } from "@/config/exclusiveOptions";
 type QuestionsProps = {
   selected: { [key: string]: string | string[] };
   setSelected: React.Dispatch<
@@ -92,36 +93,33 @@ export default function Questions({ selected, setSelected }: QuestionsProps) {
                       }}
                     >
                       <div className="flex flex-col gap-3">
-                        {sub.choices.map((option, index) => (
-                          <Checkbox
-                            key={`${sub.id}-${index}`}
-                            isDisabled={
-                              ((selected[key]?.includes("ไม่ทราบ") ||
-                                selected[key]?.includes(
-                                  "ไม่ทราบทักษะที่ควรพัฒนา",
-                                ) ||
-                                selected[key]?.includes(
-                                  "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้",
-                                )) &&
-                                option !== "ไม่ทราบ" &&
-                                option !== "ไม่ทราบทักษะที่ควรพัฒนา" &&
-                                option !==
-                                  "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้") ||
-                              (selected[key]?.includes(
-                                "ไม่ทราบทักษะที่ควรพัฒนา",
-                              ) &&
-                                option ===
-                                  "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้") ||
-                              (selected[key]?.includes(
-                                "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้",
-                              ) &&
-                                option === "ไม่ทราบทักษะที่ควรพัฒนา")
-                            }
-                            value={option}
-                          >
-                            {option}
-                          </Checkbox>
-                        ))}
+                      {sub.choices.map((option, index) => {
+   const selectedValues = Array.isArray(selected[key]) ? selected[key] : [];
+
+
+  const isSomeExclusiveSelected = selectedValues.some((val:any) => exclusiveOptions.includes(val));
+
+  const isCurrentOptionExclusive = exclusiveOptions.includes(option);
+
+  const isDisabled =
+    (isSomeExclusiveSelected && !isCurrentOptionExclusive) ||
+    // ป้องกันเลือกพร้อมกันระหว่าง exclusive ด้วยกันเอง
+    (selectedValues.includes("ไม่ทราบทักษะที่ควรพัฒนา") &&
+      option === "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้") ||
+    (selectedValues.includes("ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้") &&
+      option === "ไม่ทราบทักษะที่ควรพัฒนา") ||
+      (selectedValues.includes("อื่นๆ") &&
+        option === "ไม่ทราบ") ||
+        (selectedValues.includes("ไม่ทราบ") &&
+          option === "อื่นๆ");
+
+  return (
+    <Checkbox key={`${sub.id}-${index}`} isDisabled={isDisabled} value={option}>
+      {option}
+    </Checkbox>
+  );
+})}
+
                       </div>
                     </CheckboxGroup>
                   )}

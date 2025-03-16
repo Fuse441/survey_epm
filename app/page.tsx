@@ -469,42 +469,38 @@ export default function Home() {
 
     setCourse(scheme);
     
-   
-  
-    
+    // console.log("isSubmit && isQuestion ==> ", isSubmit, isQuestion);
+
+
+
     setLoading(false)
 
         };
 
         useEffect(() => {
-         
           if (isFirstRender.current) {
             isFirstRender.current = false;
             return;
           }
-      
+        
           const checkForm = Object.values(stateError).filter((item) => item.status === true);
-          if (checkForm.length === 0) {
-            setSubmit(true);
-          } else {
-            setSubmit(false);
-          }
-          
-          console.log("isSubmit (จาก stateError) ==> ", checkForm.length === 0 ? true : false);
-      
+          const _isSubmit = checkForm.length === 0;
+        
           const filter = stateQuestions.filter((item) => item === true);
-          const result = filter.length === 0 ? true : false;
-      
-          if (result) {
-            setQuestion(true);
-          } else {
-            setQuestion(false);
+          const _isQuestion = filter.length === 0;
+        
+          setSubmit(_isSubmit);
+          setQuestion(_isQuestion);
+        
+          console.log("isSubmit (จาก stateError) ==> ", _isSubmit);
+          console.log("isQuestion (จาก stateQuestions) ==> ", _isQuestion);
+        
+          // ✅ ใช้ค่าที่คำนวณมาแล้วแทน state
+          if (_isSubmit && _isQuestion) {
+            onOpen();
           }
-      
-          // ตรวจสอบสถานะ isQuestion โดยตรงจาก stateQuestions
-          console.log("isQuestion (จาก stateQuestions) ==> ", result);
         }, [stateError, stateQuestions]);
-
+        
         // useEffect(() => {
         //   if (isFirstRender.current) {
         //     isFirstRender.current = false;
@@ -542,7 +538,7 @@ export default function Home() {
           
             <Button color="primary" onPress={() => {
               onClose();
-              router.push("/login"); // หรือสามารถเปลี่ยนเส้นทางที่อื่นได้
+              router.push("/login"); 
             }}>
               ไปที่หน้าเข้าสู่ระบบ
             </Button>
@@ -921,13 +917,14 @@ export default function Home() {
                 className="text-sky-50 mt-5"
                 color="primary"
                 type="submit"
-                onPress={()=> {
-                  
-                  if(isSubmit && isQuestion){
-                    onOpen();
-                  }
 
-                } }
+                // onPress={()=> {
+                //   console.log(isSubmit,isQuestion)
+                //   if(isSubmit && isQuestion){
+                //     onOpen();
+                //   }
+
+                // } }
               >
                 ยืนยัน
               </Button>
