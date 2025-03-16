@@ -196,7 +196,7 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-    <div className=" mt-20 w-[2px] h-[400px] bg-gray-500 ml-10"></div>
+    
     {/* Right Side - ฟอร์ม Login / สมัครสมาชิก */}
     <div className="w-1/2 w-full flex justify-center items-center relative">
       {!isLoading ? null : (
