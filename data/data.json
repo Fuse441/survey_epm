@@ -46,5 +46,35 @@
         "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
       ]
     }
+  ],
+  [
+    {
+      "department": "IT Infrastructure Services (ฝ่ายบริหารโครงสร้างด้านเทคโนโลยีสารสนเทศ)",
+      "label": [
+        "หลักสูตร Network Design & Administration",
+        "หลักสูตร Cybersecurity & Ethical Hacking",
+        "หลักสูตร IT Infrastructure & Cloud Management"
+      ],
+      "softskill": [
+        "หลักสูตร Network Design & Administration",
+        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
+        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
+      ]
+    }
+  ],
+  [
+    {
+      "department": "IT Infrastructure Services (ฝ่ายบริหารโครงสร้างด้านเทคโนโลยีสารสนเทศ)",
+      "label": [
+        "หลักสูตร Network Design & Administration",
+        "หลักสูตร Cybersecurity & Ethical Hacking",
+        "หลักสูตร IT Infrastructure & Cloud Management"
+      ],
+      "softskill": [
+        "หลักสูตร Network Design & Administration",
+        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
+        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)"
+      ]
+    }
   ]
 ]

@@ -81,7 +81,7 @@ export default function DashBoardPage() {
   return (
     <div className="w-full">
       <div className="text-start my-5">
-        <h1 className="font-bold text-4xl">Dashboard Survey</h1>
+        <h1 className="font-bold text-4xl">Dashboard Workforce Skill Development Platform</h1>
       </div>
 
       <div className="grid grid-cols-5 grid-rows-6 gap-2">

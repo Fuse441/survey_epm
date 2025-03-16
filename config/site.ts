@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Survey",
+  name: "Workforce Skill Development Platform",
   description: "แบบสำรวจความต้องการพัฒนาฝีมือแรงงานของสถานประกอบการ",
   navItems: [],
   navMenuItems: [],

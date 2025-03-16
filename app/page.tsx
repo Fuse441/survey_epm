@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RadioGroup, Radio } from "@heroui/radio";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { Divider } from "@heroui/divider";
@@ -27,7 +27,7 @@ import GetProvince from "./../service/province";
 import { groupTypeBusiness, typeOfBusiness } from "@/config/configForm";
 import Questions from "@/components/question";
 import { questions } from "@/config/questions";
-import { selectCourse } from "@/config/selectCourse";
+import { selectCourse, selectSoftSkill } from "@/config/selectCourse";
 import { stateQuestions } from "@/config/stateQuestions";
 import { IForm } from "@/interfaces/form";
 import { Spinner } from "@heroui/spinner";
@@ -62,18 +62,20 @@ export default function Home() {
     },
   });
   const [isSubmit,setSubmit] = useState<boolean>(false)
+  const [isQuestion,setQuestion] = useState<boolean>(false)
+  
   const [isAuthen, setIsAuthen] = useState<boolean>();
   const router = useRouter();
   
   useEffect(() => {
    
     if(!localStorage.getItem("token")){
-        router.push("/login")
+       return router.push("/login")
     }
 
     const data = localStorage.getItem("token")
     const decrypt_token = CryptoJS.AES.decrypt(JSON.parse(data!), 'emp').toString(CryptoJS.enc.Utf8);
-    if(JSON.parse(decrypt_token).isSend){
+    if(JSON.parse(decrypt_token).status){
     
       setIsAuthen(true)
       setShowSuccess(true)
@@ -87,7 +89,7 @@ export default function Home() {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   
-  const [courses, setCourse] = useState<any>();
+  const [courses, setCourse] = useState<any>([]);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -140,7 +142,6 @@ export default function Home() {
     input: React.ChangeEvent<HTMLInputElement> | { name: string; value: any }
   ) => {
     if ("target" in input) {
-      // เมื่อ event มาจาก input element
       const { name, value } = input.target;
 
       
@@ -236,85 +237,70 @@ export default function Home() {
       [key]: { ...prevState[key], status: value },
     }));
   };
-  const selectSoftSkill: any = {
-    "หลักสูตร Effective Communication & Teamwork (การสื่อสาร การนำเสนอ และการทำงานเป็นทีม)":
-      {
-        label: "หลักสูตร Network Design & Administration",
-        match: "Cloud Computing & Cloud Security",
-        deltail: [
-          "เทคนิคการสื่อสารในที่ทำงานอย่างมืออาชีพ",
-          "Storytelling & Presentation Skills เพื่อการนำเสนอที่น่าสนใจ",
-          "Active Listening & Nonverbal Communication การฟังอย่างมีประสิทธิภาพ",
-          "การใช้ภาษากายและน้ำเสียง เพื่อเพิ่มประสิทธิภาพในการนำเสนอ",
-          "Collaboration Tools (Microsoft Teams, Slack, Trello) และการทำงานข้ามแผนก",
-          "Team Dynamics & Conflict Resolution  การทำงานเป็นทีมและการแก้ไขข้อขัดแย้ง",
-        ],
-        time: "1 Day",
-        location: "สถาบันพัฒนาฝีมือแรงงาน / Online Training",
-        noti: "*หากท่านต้องการอบรม ณ สถานประกอบการ กรุณาติดต่อเจ้าหน้าที่ของสถาบันพัฒนาฝีมือแรงงาน",
-        reason:
-          "เพื่อเพิ่มความสามารถในการออกแบบและบริหารเครือข่ายให้มีประสิทธิภาพ รองรับปริมาณการใช้งานที่เพิ่มขึ้น และลดปัญหาการหยุดชะงักของระบบ",
-      },
-    "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)":
-      {
-        label:
-          "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
-        match: "Cloud Computing & Cloud Security",
-        deltail: [
-          "Critical Thinking Frameworks (SWOT Analysis, Root Cause Analysis, 5 Whys)",
-          "Structured Problem Solving  วิธีการวิเคราะห์ปัญหาอย่างเป็นระบบ",
-          "การใช้ Design Thinking เพื่อพัฒนานวัตกรรมในองค์กร",
-          "การคิดสร้างสรรค์และการพัฒนาไอเดียใหม่ๆ",
-          "แนวทางการเป็นผู้นำที่สร้างแรงบันดาลใจ",
-          "Emotional Intelligence (EQ) และการบริหารทีมแบบ Agile Leadership",
-        ],
-        time: "1 Day",
-        location: "สถาบันพัฒนาฝีมือแรงงาน / Online Training",
-        noti: "*หากท่านต้องการอบรม ณ สถานประกอบการ กรุณาติดต่อเจ้าหน้าที่ของสถาบันพัฒนาฝีมือแรงงาน",
-        reason: "",
-      },
-    "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)":
-      {
-        label:
-          "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)",
-        match: "Cloud Computing & Cloud Security",
-        deltail: [
-          "เทคนิคการจัดลำดับความสำคัญของงาน (Eisenhower Matrix, Pomodoro Technique)",
-          "Digital Tools for Productivity (Google Calendar, Microsoft Outlook, Notion)",
-          "Growth Mindset & Adaptability  การปรับตัวในยุค Digital Transformation",
-          "Stress Management Techniques  เทคนิคจัดการความเครียด และ Work-Life Balance",
-          "Conflict Resolution & Negotiation Skills  วิธีการเจรจาต่อรองแบบ Win-Win",
-          "Emotional Resilience & Mindfulness  การเสริมสร้างความแข็งแกร่งทางอารมณ์",
-        ],
-        time: "1 Day",
-        location: "สถาบันพัฒนาฝีมือแรงงาน / Online Training",
-        noti: "*หากท่านต้องการอบรม ณ สถานประกอบการ กรุณาติดต่อเจ้าหน้าที่ของสถาบันพัฒนาฝีมือแรงงาน",
-        reason: "",
-      },
-  };
+ 
+ 
+  const itemsPerPage = 1; 
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedCourses = courses?.slice(startIndex, endIndex) ?? [];
+  const isFirstRender = useRef(true);
 
-  const course = () => {
-    // 
-
-    for (let index = 0; index < questions.length; index++) {
-      const current = index + 1;
-      let foundDefined = false;
-
-      for (let jndex = 0; jndex < 9; jndex++) {
-        const currentJ = jndex + 1;
-        // 
-
-        if (selected[`${current}.${currentJ}`] === undefined) {
-          foundDefined = true;
-          break;
-        }else{
-          foundDefined = false
-        }
-      }
-
-      stateQuestions[index] = foundDefined;
-    }
+  const onSubmit =  async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true)    
+    const validationErrors = {
+      vaildate_EstablishmentName: !form.establishmentName,
+      vaildate_Branch: !form.branch,
+      vaildate_TypeBusiness: !form.typeBusiness,
+      vaildate_Size: !form.size,
+      vaildate_Address: !form.user.address,
+      vaildate_Province: !form.user.province,
+      vaildate_District: !form.user.district,
+      vaildate_SubDistrict: !form.user.subdistrict,
+      vaildate_ZipCode: !form.user.zipCode,
+      vaildate_FirstName: !form.user.firstName,
+      vaildate_LastName: !form.user.lastName,
+      vaildate_PhoneNumber: !form.user.phoneNumber,
+      vaildate_Email: !form.user.email,
+      vaildate_Position: !form.user.position,
+    };
     
+    await Promise.all(
+      Object.entries(validationErrors).map(async ([key, value]) => {
+        console.log("key, value ==> ", key, value);
+        await updateStatus(key, value === true);
+      })
+    );
+    
+    await Promise.all(
+       questions.map(async (question, index) => {
+        const current = index + 1;
+        let foundDefined = false;
+    
+        // ลูปผ่าน sub_questions
+        for (let jndex = 0; jndex < question.sub_question.length; jndex++) {
+          const currentJ = jndex + 1;
+          
+          // เช็คว่า selected[`${current}.${currentJ}`] เป็น undefined หรือไม่
+          if (selected[`${current}.${currentJ}`] === undefined) {
+            foundDefined = true;
+            break;
+          } else {
+            foundDefined = false;
+          }
+        }
+    
+        stateQuestions[index] = foundDefined;
+       }
+    )
+  )
+      
+    
+    
+ 
+  
+   
+
     let scheme: any[] = [];
 
     for (let index = 0; index < questions.length; index++) {
@@ -322,14 +308,14 @@ export default function Home() {
       const current = index + 1;
 
       let obj = {};
-    
       if (
         selected[`${current}.1`] == "มาก" &&
         selected[`${current}.3`] != "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"
       ) {
+        console.log("in case มาก ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้ ")
         const mappedItems = (selectCourse[question] || []).map((item: any) => {
-          // ถ้ายังไม่ได้เลือก ให้แนะนำ
-          if (!selected[`${current}.3`].includes(item.match)) {
+          
+          if (selected[`${current}.3`] && !selected[`${current}.3`].includes(item.match)) {
             return { ...item, recommend: true };
           }
           return item;
@@ -353,6 +339,7 @@ export default function Home() {
       
     
       else if(selected[`${current}.1`] == "ปานกลาง" && selected[`${current}.3`] == "ไม่ทราบทักษะที่ควรพัฒนา" ){
+        console.log("in case ปานกลาง ไม่ทราบทักษะที่ควรพัฒนา")
         const result = selectCourse[question].filter((item: any) =>
           selected[`${current}.3`].includes(item.match)
         );
@@ -382,11 +369,70 @@ export default function Home() {
         
         scheme.push(obj);
         
-        }          
+        }
+        else if(selected[`${current}.1`] == "ปานกลาง"){
+          const result = selectCourse[question].filter((item: any) =>
+            selected[`${current}.3`].includes(item.match)
+          );
+          
+          const unselectedItems = selectCourse[question].filter(
+            (item: any) => !selected[`${current}.3`].includes(item.match)
+          );
+          
+          let finalItems = [...result];
+          
+          if (result.length === 1 && unselectedItems.length > 0) {
+            const recommendItem = { ...unselectedItems[0], recommend: true };
+            finalItems.push(recommendItem); 
+          }
+          
+         
+          finalItems.sort((a, b) => {
+            if (a.recommend && !b.recommend) return 1;
+            if (!a.recommend && b.recommend) return -1;
+            return 0;
+          });
+          
+          const obj = {
+            [question]: finalItems,
+            softSkill: selectSoftSkill,
+          };
+          
+          scheme.push(obj);
+          
+          }
+          else if (
+            selected[`${current}.1`] == "น้อย" &&
+            selected[`${current}.2`] == "อื่นๆ"
+          ) {
+             console.log("in case น้อย")
+            const mappedItems = (selectCourse[question] || []).map((item: any) => {
+              
+              if (selected[`${current}.3`]) {
+                return { ...item, recommend: true };
+              }
+              return item;
+            });
+            
+            // จัดเรียง: ไม่มี recommend อยู่ข้างหน้า
+            const sortedItems = mappedItems.sort((a: any, b: any) => {
+              if (a.recommend && !b.recommend) return 1;  // ถ้ามี recommend มาไว้หลัง
+              if (!a.recommend && b.recommend) return -1; // ถ้าไม่มี recommend ให้ไปข้างหน้า
+              return 0;  // ถ้าทั้งคู่มีหรือไม่มี recommend อยู่แล้วก็ไม่เปลี่ยนแปลง
+            });
+            
+            const obj = {
+              [question]: sortedItems,
+              softSkill: selectSoftSkill,
+            };
+            
+            scheme.push(obj);
+            }                    
        else if (
         selected[`${current}.1`] == "น้อย" &&
         selected[`${current}.3`] != "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"
       ) {
+        console.log("in case น้อย ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้")
         const result = selectCourse[question].filter((item: any) =>
           selected[`${current}.3`].includes(item.match)
         );
@@ -403,9 +449,11 @@ export default function Home() {
         
         // 
         scheme.push(obj);
-      }else{
+      } 
+      
+      else{
          let clone: any = selectCourse[question];
-        
+        console.log("in case else")
         
 
         const obj = {
@@ -420,56 +468,54 @@ export default function Home() {
     
 
     setCourse(scheme);
-    const filter = stateQuestions.filter((item) => item == true)
-    const result = filter.length > 0 ? false : true
-
-
-  return result && isSubmit;
-  };
- 
-  const itemsPerPage = 1; 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedCourses = courses?.slice(startIndex, endIndex) ?? [];
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.currentTarget));
-    const sm  = Object.values(data).filter((item) => item == '');
-    // 
-    setSubmit(sm.length > 0 ? false : true)
-    // 
-    const validationErrors = {
-      vaildate_EstablishmentName: !form.establishmentName,
-      vaildate_Branch: !form.branch,
-      vaildate_TypeBusiness: !form.typeBusiness,
-      vaildate_Size: !form.size,
-      vaildate_Address: !form.user.address,
-      vaildate_Province: !form.user.province,
-      vaildate_District: !form.user.district,
-      vaildate_SubDistrict: !form.user.subdistrict,
-      vaildate_ZipCode: !form.user.zipCode,
-      vaildate_FirstName: !form.user.firstName,
-      vaildate_LastName: !form.user.lastName,
-      vaildate_PhoneNumber: !form.user.phoneNumber,
-      vaildate_Email: !form.user.email,
-      vaildate_Position: !form.user.position,
-    };
     
-    Object.entries(validationErrors).forEach(([key, value]) => {
+   
+  
     
-      if (value == true) { 
+    setLoading(false)
+
+        };
+
+        useEffect(() => {
+         
+          if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+          }
       
-        updateStatus(key, true)
-      }else{
+          const checkForm = Object.values(stateError).filter((item) => item.status === true);
+          if (checkForm.length === 0) {
+            setSubmit(true);
+          } else {
+            setSubmit(false);
+          }
+          
+          console.log("isSubmit (จาก stateError) ==> ", checkForm.length === 0 ? true : false);
       
-        updateStatus(key, false)
-      }
-    });
-    // 
+          const filter = stateQuestions.filter((item) => item === true);
+          const result = filter.length === 0 ? true : false;
+      
+          if (result) {
+            setQuestion(true);
+          } else {
+            setQuestion(false);
+          }
+      
+          // ตรวจสอบสถานะ isQuestion โดยตรงจาก stateQuestions
+          console.log("isQuestion (จาก stateQuestions) ==> ", result);
+        }, [stateError, stateQuestions]);
+
+        // useEffect(() => {
+        //   if (isFirstRender.current) {
+        //     isFirstRender.current = false;
+        //     return;
+        //   }
+          
+        //   if (isSubmit && isQuestion) {
+        //     onOpen();
+        //   }
+        // }, [isSubmit, isQuestion]);
         
-  };
-
   return (
     <>
     <div>
@@ -521,13 +567,13 @@ export default function Home() {
       <div className="fixed inset-0 blur-xl bg-red-50 bg-opacity-50 z-40"></div>
 
 <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-  <Spinner classNames={{ label: "text-foreground mt-4" }} label="กำลังเข้าสู่ระบบ" variant="simple" />
+  <Spinner classNames={{ label: "text-foreground mt-4" }} label="กำลังโหลด" variant="simple" />
 </div>
           </>
         )
       }
-        <div className="mb-10 flex justify-center">
-          <h1 className="text-3xl">
+        <div className="mb-10 flex justify-center w-full">
+          <h1 className="text-3xl text-center">
             แบบสำรวจความต้องการพัฒนาฝีมือแรงงานของสถานประกอบการ
           </h1>
         </div>
@@ -554,6 +600,14 @@ export default function Home() {
                     type="number"
                     className="col-span-3"
                     // isDisabled={}
+                    isInvalid={form.regisNumber != '' && form.regisNumber.length !== 13}
+                    errorMessage={(validationDetails) =>
+                      
+                      validationDetails.isInvalid
+                        ? "กรุณากรอกเลขทะเบียนพาณิชย์ให้ครบ 13 หลัก"
+                        : ""
+                    }
+                     pattern="^\d{13}$"
                     label="เลขทะเบียนพาณิชย์"
                   />
                   <Input
@@ -754,22 +808,6 @@ export default function Home() {
                     handleChange({ name: "zipCode", value:  event.target.value });
                   }}
                 />
-                {/* <Input
-                  isRequired
-                  className="col-span-2"
-                  label="เบอร์โทรศัพท์"
-                  placeholder="กรอกเบอร์โทรศัพท์"
-                  errorMessage={"กรุณากรอกเบอร์โทรศัพท์"}
-                  isInvalid={
-                    !form.user.phoneNumber &&
-                    stateError.vaildate_PhoneNumber.status
-                  }
-                  type="number"
-                  onChange={(event) => {
-                    handleChange({ name: "phoneNumber", value: event.target.value });
-                  }}
-                  value={form.user.phoneNumber}
-                /> */}
                 <h1 className="mx-2 text-xl col-span-3 text-stone-950">
                   รายละเอียดผู้ตอบแบบสำรวจ
                 </h1>
@@ -856,13 +894,13 @@ export default function Home() {
                   ข้อมูลความต้องการพัฒนาทักษะแรงงานหรือไม่?
                 </h1>
                  <h1 className="mx-2 mt-3 text-xl col-span-3 text-stone-950">
-          ปัจจุบันบริษัทขงท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน หรือไม่?
+          ปัจจุบันบริษัทของท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน หรือไม่?
         </h1> 
                 
               <RadioGroup
                 className="col-span-3"
                 defaultValue="has"
-                label="ปัจจุบันบริษัทขงท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน"
+                label="ปัจจุบันบริษัทของท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน"
                 onValueChange={(value) => setProvideskills(value)}
               >
                
@@ -885,7 +923,9 @@ export default function Home() {
                 type="submit"
                 onPress={()=> {
                   
-                  course() && onOpen();
+                  if(isSubmit && isQuestion){
+                    onOpen();
+                  }
 
                 } }
               >
@@ -972,10 +1012,12 @@ export default function Home() {
                                                 </Chip>
                                                   {course.recommend ? (
                                                      <Chip color="secondary" className="">
-                                                      หลักสูตรแนะนำ
+                                                      หลักสูตรที่เกี่ยวข้อง
                                                 </Chip>
 
-                                                  ) : ""}
+                                                  ) :   <Chip color="success" className="text-sky-50">
+                                                  หลักสูตรแนะนำ
+                                            </Chip>}
                                               </div>
                                             </CardBody>
                                           </Card>

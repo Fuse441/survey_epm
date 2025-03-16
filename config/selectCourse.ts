@@ -431,3 +431,60 @@ export const selectCourse: any = {
     },
   ],
 };
+
+export const selectSoftSkill: any = {
+  "หลักสูตร Effective Communication & Teamwork (การสื่อสาร การนำเสนอ และการทำงานเป็นทีม)":
+    {
+      label: "หลักสูตร Network Design & Administration",
+      match: "Cloud Computing & Cloud Security",
+      deltail: [
+        "เทคนิคการสื่อสารในที่ทำงานอย่างมืออาชีพ",
+        "Storytelling & Presentation Skills เพื่อการนำเสนอที่น่าสนใจ",
+        "Active Listening & Nonverbal Communication การฟังอย่างมีประสิทธิภาพ",
+        "การใช้ภาษากายและน้ำเสียง เพื่อเพิ่มประสิทธิภาพในการนำเสนอ",
+        "Collaboration Tools (Microsoft Teams, Slack, Trello) และการทำงานข้ามแผนก",
+        "Team Dynamics & Conflict Resolution  การทำงานเป็นทีมและการแก้ไขข้อขัดแย้ง",
+      ],
+      time: "1 Day",
+      location: "สถาบันพัฒนาฝีมือแรงงาน / Online Training",
+      noti: "*หากท่านต้องการอบรม ณ สถานประกอบการ กรุณาติดต่อเจ้าหน้าที่ของสถาบันพัฒนาฝีมือแรงงาน",
+      reason:
+        "เพื่อเพิ่มความสามารถในการออกแบบและบริหารเครือข่ายให้มีประสิทธิภาพ รองรับปริมาณการใช้งานที่เพิ่มขึ้น และลดปัญหาการหยุดชะงักของระบบ",
+    },
+  "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)":
+    {
+      label:
+        "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
+      match: "Cloud Computing & Cloud Security",
+      deltail: [
+        "Critical Thinking Frameworks (SWOT Analysis, Root Cause Analysis, 5 Whys)",
+        "Structured Problem Solving  วิธีการวิเคราะห์ปัญหาอย่างเป็นระบบ",
+        "การใช้ Design Thinking เพื่อพัฒนานวัตกรรมในองค์กร",
+        "การคิดสร้างสรรค์และการพัฒนาไอเดียใหม่ๆ",
+        "แนวทางการเป็นผู้นำที่สร้างแรงบันดาลใจ",
+        "Emotional Intelligence (EQ) และการบริหารทีมแบบ Agile Leadership",
+      ],
+      time: "1 Day",
+      location: "สถาบันพัฒนาฝีมือแรงงาน / Online Training",
+      noti: "*หากท่านต้องการอบรม ณ สถานประกอบการ กรุณาติดต่อเจ้าหน้าที่ของสถาบันพัฒนาฝีมือแรงงาน",
+      reason: "",
+    },
+  "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)":
+    {
+      label:
+        "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)",
+      match: "Cloud Computing & Cloud Security",
+      deltail: [
+        "เทคนิคการจัดลำดับความสำคัญของงาน (Eisenhower Matrix, Pomodoro Technique)",
+        "Digital Tools for Productivity (Google Calendar, Microsoft Outlook, Notion)",
+        "Growth Mindset & Adaptability  การปรับตัวในยุค Digital Transformation",
+        "Stress Management Techniques  เทคนิคจัดการความเครียด และ Work-Life Balance",
+        "Conflict Resolution & Negotiation Skills  วิธีการเจรจาต่อรองแบบ Win-Win",
+        "Emotional Resilience & Mindfulness  การเสริมสร้างความแข็งแกร่งทางอารมณ์",
+      ],
+      time: "1 Day",
+      location: "สถาบันพัฒนาฝีมือแรงงาน / Online Training",
+      noti: "*หากท่านต้องการอบรม ณ สถานประกอบการ กรุณาติดต่อเจ้าหน้าที่ของสถาบันพัฒนาฝีมือแรงงาน",
+      reason: "",
+    },
+};
