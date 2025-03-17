@@ -99,7 +99,7 @@ export default function DashBoardPage() {
   <Card className="pl-3 w-[250px] text-center">
     <CardHeader className="flex justify-center items-center gap-2">
       <DepartmentIcon size={24} className="text-green-500" />
-      <p>จำนวนแผนก</p>
+      <p >จำนวนแผนก</p>
     </CardHeader>
     <CardBody>
       <p className="font-bold text-2xl">10 แผนก</p>

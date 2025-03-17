@@ -335,9 +335,38 @@ export default function Home() {
         
         scheme.push(obj);
         
-      }
+      }else if(selected[`${current}.1`] == "ปานกลาง" && selected[`${current}.3`] == "ไม่ทราบทักษะที่ควรพัฒนา" ){
+        console.log("in case ปานกลาง ไม่ทราบทักษะที่ควรพัฒนา")
+       
       
-    
+        const result = [selectCourse[question][0],selectCourse[question][1]]
+      
+        const unselectedItems = selectCourse[question].filter(
+          (item: any) => !selected[`${current}.3`].includes(item.match)
+        );
+        
+        let finalItems = [...result];
+        
+        if (result.length === 1 && unselectedItems.length > 0) {
+          const recommendItem = { ...unselectedItems[0], recommend: true };
+          finalItems.push(recommendItem); // ใส่ recommend ไว้ท้ายก่อน แล้วค่อย sort
+        }
+        
+        // 🔥 จัดเรียง: recommend=false อยู่ด้านหน้า
+        finalItems.sort((a, b) => {
+          if (a.recommend && !b.recommend) return 1;
+          if (!a.recommend && b.recommend) return -1;
+          return 0;
+        });
+        
+        const obj = {
+          [question]: finalItems,
+          softSkill: selectSoftSkill,
+        };
+        
+        scheme.push(obj);
+        
+        }
       else if(selected[`${current}.1`] == "ปานกลาง" && selected[`${current}.3`] == "ไม่ทราบทักษะที่ควรพัฒนา" ){
         console.log("in case ปานกลาง ไม่ทราบทักษะที่ควรพัฒนา")
         const result = selectCourse[question].filter((item: any) =>
@@ -403,6 +432,44 @@ export default function Home() {
           }
           else if (
             selected[`${current}.1`] == "น้อย" &&
+           ( selected[`${current}.2`] == "อื่นๆ" || selected[`${current}.2`] == "ไม่ทราบ") && selected[`${current}.3`] == "ไม่ทราบทักษะที่ควรพัฒนา"
+          ) {
+             console.log("in case น้อย")
+            const mappedItems = [selectCourse[question][0]]
+            
+            // จัดเรียง: ไม่มี recommend อยู่ข้างหน้า
+            // const sortedItems = mappedItems.sort((a: any, b: any) => {
+            //   if (a.recommend && !b.recommend) return 1;  // ถ้ามี recommend มาไว้หลัง
+            //   if (!a.recommend && b.recommend) return -1; // ถ้าไม่มี recommend ให้ไปข้างหน้า
+            //   return 0;  // ถ้าทั้งคู่มีหรือไม่มี recommend อยู่แล้วก็ไม่เปลี่ยนแปลง
+            // });
+            
+            const obj = {
+              [question]: mappedItems,
+              softSkill: selectSoftSkill,
+            };
+            
+            scheme.push(obj);
+            }       
+            else if (
+              selected[`${current}.1`] == "น้อย" &&
+              (selected[`${current}.2`] != "อื่นๆ" || selected[`${current}.2`] != "ไม่ทราบ")
+            ) {
+              console.log("in case น้อย != อื่นๆ,ไม่ทราบ")
+              const result = [selectCourse[question][0]]
+              
+      
+              const obj = {
+                [question]: result,
+                softSkill: selectSoftSkill,
+              };
+              
+              // 
+              scheme.push(obj);
+            } 
+            
+          else if (
+            selected[`${current}.1`] == "น้อย" &&
             selected[`${current}.2`] == "อื่นๆ"
           ) {
              console.log("in case น้อย")
@@ -428,29 +495,7 @@ export default function Home() {
             
             scheme.push(obj);
             }                    
-       else if (
-        selected[`${current}.1`] == "น้อย" &&
-        selected[`${current}.3`] != "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"
-      ) {
-        console.log("in case น้อย ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้")
-        const result = selectCourse[question].filter((item: any) =>
-          selected[`${current}.3`].includes(item.match)
-        );
-        
-        let clone: any = selectCourse[question];
-
-        clone &&= [];
-        clone == 0 && (clone = result);
-
-        const obj = {
-          [question]: clone || {},
-          softSkill: selectSoftSkill,
-        };
-        
-        // 
-        scheme.push(obj);
-      } 
-      
+       
       else{
          let clone: any = selectCourse[question];
         console.log("in case else")
@@ -883,15 +928,15 @@ export default function Home() {
                     handleChange({ name: "position", value: event.target.value });
                   }}
                 />
+               
                 <div className="questions col-span-3 mt-3">
+                <Divider/>
                   <h1 className="text-xl">แบบสอบถาม</h1>
                   {/* <pre>{JSON.stringify(selected, null, 2)}</pre> */}
 
                   <Questions selected={selected} setSelected={setSelected} />
                 </div>
-                <h1 className="mx-2 mt-3 text-xl col-span-3 text-stone-950">
-                  ข้อมูลความต้องการพัฒนาทักษะแรงงานหรือไม่?
-                </h1>
+               
                  <h1 className="mx-2 mt-3 text-xl col-span-3 text-stone-950">
           ปัจจุบันบริษัทของท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน หรือไม่?
         </h1> 

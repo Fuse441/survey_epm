@@ -75,11 +75,13 @@ export default function Questions({ selected, setSelected }: QuestionsProps) {
                           (item) =>
                             item == "ไม่ทราบ" ||
                             item == "ไม่ทราบทักษะที่ควรพัฒนา" ||
-                            item == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้",
+                            item == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้" ||
+                            item == "อื่นๆ",
                         );
 
                         
                         if (selectedValue) {
+                        console.log("selectedValue ==> ", selectedValue);
                           setSelected((prev) => ({
                             ...prev,
                             [key]: [selectedValue],
