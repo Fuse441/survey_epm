@@ -45,7 +45,7 @@ export default function DashBoardPage() {
 
       const result = await response.json();
 
-      return result;
+      return result.values;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -55,11 +55,12 @@ export default function DashBoardPage() {
     const fetchAndSetData = async () => {
       const result = await fetchData();
 
+      
       setResult(result || []);
-      const sort = topLearn(result);
+       const sort = topLearn(result);
 
       
-      setTop(sort);
+       setTop(sort);
     };
 
     fetchAndSetData();

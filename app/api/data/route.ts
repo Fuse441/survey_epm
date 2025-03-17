@@ -26,15 +26,17 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  const filePath = path.join(process.cwd(), "data", "data.json");
-
-  if (fs.existsSync(filePath)) {
-    const fileContent = fs.readFileSync(filePath, "utf-8");
-
+  const collection = await ConnectMongo("departmentSkills")
+ const data = await collection.find({}).toArray()
+ console.log("data ==> ", data);
+ 
     try {
-      return NextResponse.json({ data: fileContent }, { status: 200 });
+      return NextResponse.json({
+        message : "ดึงข้อมูลสำเร็จ",
+        values : data
+      })
     } catch (err) {
       console.error("Error parsing existing JSON:", err);
     }
-  }
+  
 }

@@ -20,12 +20,12 @@ export const topLearn = (response: any) => {
   });
 
   if (response) {
-    const object = response && JSON.parse(response.data);
+    const object = response
 
     
 
     object.forEach((array: any) => {
-      array.forEach((element: any) => {
+      array.data.forEach((element: any) => {
         const matchedDept = departments.find((dept) =>
           new RegExp(dept, "i").test(element.department),
         );
@@ -67,12 +67,16 @@ export const radar = (response: any) => {
   });
 
   if (response) {
-    const object = response && JSON.parse(response.data);
+ 
+    const object = response
+ 
 
     
 
     object.forEach((array: any) => {
-      array.forEach((element: any) => {
+   
+      array.data.forEach((element: any) => {
+      console.log("element ==> ", element);
         const matchedDept = departments.find((dept) =>
           new RegExp(dept, "i").test(element.department),
         );
@@ -113,11 +117,11 @@ export const doughnut = (response: any) => {
   let totalSoftskill = 0;
 
   if (response) {
-    const object = response && JSON.parse(response.data);
+    const object = response
 
     response;
     object.forEach((array: any) => {
-      array.forEach((dept: any) => {
+      array.data.forEach((dept: any) => {
         totalLabel += dept.label?.length || 0;
         totalSoftskill += dept.softskill?.length || 0;
       });
@@ -166,10 +170,10 @@ export const bar = (response: any) => {
   });
 
   if (response) {
-    const object = response && JSON.parse(response.data);
+    const object = response
 
     object.forEach((array: any) => {
-      array.forEach((element: any) => {
+      array.data.forEach((element: any) => {
         const matchedDept = departments.find((dept) =>
           new RegExp(dept, "i").test(element.department),
         );
