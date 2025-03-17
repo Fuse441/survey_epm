@@ -2,6 +2,56 @@ import * as React from "react";
 
 import { IconSvgProps } from "@/types";
 
+
+// components/icons.tsx
+
+export const UsersIcon = ({ size = 24, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={`stroke-current ${className}`}
+    width={size}
+    height={size}
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <circle cx="9" cy="7" r="4" strokeWidth="2" />
+    <path
+      d="M23 21v-2a4 4 0 0 0-3-3.87"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" strokeWidth="2" />
+  </svg>
+);
+
+export const DepartmentIcon = ({ size = 24, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={`stroke-current ${className}`}
+    width={size}
+    height={size}
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      d="M3 9.5V4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v5.5"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <rect x="3" y="9.5" width="18" height="11" rx="2" strokeWidth="2" />
+    <path d="M8 9.5v11M16 9.5v11" strokeWidth="2" />
+  </svg>
+);
+
+
 export const Logo: React.FC<IconSvgProps> = ({
   size = 36,
   width,

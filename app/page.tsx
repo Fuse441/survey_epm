@@ -479,6 +479,7 @@ export default function Home() {
 
         useEffect(() => {
           if (isFirstRender.current) {
+          console.log("isFirstRender.current ==> ", isFirstRender.current);
             isFirstRender.current = false;
             return;
           }

@@ -76,7 +76,7 @@ export const radar = (response: any) => {
     object.forEach((array: any) => {
    
       array.data.forEach((element: any) => {
-      console.log("element ==> ", element);
+      // console.log("element ==> ", element);
         const matchedDept = departments.find((dept) =>
           new RegExp(dept, "i").test(element.department),
         );

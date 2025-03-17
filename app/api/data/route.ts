@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   const collection = await ConnectMongo("departmentSkills")
  const data = await collection.find({}).toArray()
- console.log("data ==> ", data);
+//  console.log("data ==> ", data);
  
     try {
       return NextResponse.json({
