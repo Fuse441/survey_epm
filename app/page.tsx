@@ -497,6 +497,7 @@ export default function Home() {
         
           // ✅ ใช้ค่าที่คำนวณมาแล้วแทน state
           if (_isSubmit && _isQuestion) {
+          console.log("_isSubmit && _isQuestion ==> ", _isSubmit && _isQuestion);
         
             onOpen(); 
           }
