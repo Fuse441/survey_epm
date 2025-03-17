@@ -303,213 +303,83 @@ export default function Home() {
 
     let scheme: any[] = [];
 
+    function getSortedCourses(result: any[], unselectedItems: any[], maxRecommend = 1) {
+      let finalItems = [...result];
+      if (result.length < maxRecommend && unselectedItems.length > 0) {
+        const recommendItems = unselectedItems.slice(0, maxRecommend - result.length).map(item => ({
+          ...item,
+          recommend: true
+        }));
+        finalItems = [...result, ...recommendItems];
+      }
+    
+      // ให้ recommend = false อยู่ข้างหน้า
+      return finalItems.sort((a, b) => (a.recommend ? 1 : -1));
+    }
+    
     for (let index = 0; index < questions.length; index++) {
       const question = questions[index].question;
       const current = index + 1;
-
-      let obj = {};
-      if (
-        selected[`${current}.1`] == "มาก" &&
-        selected[`${current}.3`] != "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"
-      ) {
-        console.log("in case มาก ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้ ")
-        const mappedItems = (selectCourse[question] || []).map((item: any) => {
-          
-          if (selected[`${current}.3`] && !selected[`${current}.3`].includes(item.match)) {
-            return { ...item, recommend: true };
-          }
-          return item;
-        });
-        
-        // จัดเรียง: ไม่มี recommend อยู่ข้างหน้า
-        const sortedItems = mappedItems.sort((a: any, b: any) => {
-          if (a.recommend && !b.recommend) return 1;  // ถ้ามี recommend มาไว้หลัง
-          if (!a.recommend && b.recommend) return -1; // ถ้าไม่มี recommend ให้ไปข้างหน้า
-          return 0;  // ถ้าทั้งคู่มีหรือไม่มี recommend อยู่แล้วก็ไม่เปลี่ยนแปลง
-        });
-        
-        const obj = {
-          [question]: sortedItems,
-          softSkill: selectSoftSkill,
-        };
-        
-        scheme.push(obj);
-        
-      }else if(selected[`${current}.1`] == "ปานกลาง" && selected[`${current}.3`] == "ไม่ทราบทักษะที่ควรพัฒนา" ){
-        console.log("in case ปานกลาง ไม่ทราบทักษะที่ควรพัฒนา")
-       
-      
-        const result = [selectCourse[question][0],selectCourse[question][1]]
-      
-        const unselectedItems = selectCourse[question].filter(
-          (item: any) => !selected[`${current}.3`].includes(item.match)
-        );
-        
-        let finalItems = [...result];
-        
-        if (result.length === 1 && unselectedItems.length > 0) {
-          const recommendItem = { ...unselectedItems[0], recommend: true };
-          finalItems.push(recommendItem); // ใส่ recommend ไว้ท้ายก่อน แล้วค่อย sort
+    
+      const level = selected[`${current}.1`];
+      const knowledge = selected[`${current}.2`];
+      const selectedSkills = selected[`${current}.3`] || [];
+      const allCourses = selectCourse[question] || [];
+      const softSkill = selectSoftSkill;
+      let finalCourses: any[] = [];
+    
+      if (level === "มาก") {
+        if (selectedSkills != "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้") {
+          const result = allCourses.filter((item: { match: string; }) => selectedSkills.includes(item.match));
+          const unselected = allCourses.filter((item: { match: string; }) => !selectedSkills.includes(item.match));
+          finalCourses = getSortedCourses(result, unselected, 3);
+        }else if(selectedSkills == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"){
+          console.log("case มาก ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้")
+          finalCourses = getSortedCourses([], [], 0);
         }
-        
-        // 🔥 จัดเรียง: recommend=false อยู่ด้านหน้า
-        finalItems.sort((a, b) => {
-          if (a.recommend && !b.recommend) return 1;
-          if (!a.recommend && b.recommend) return -1;
-          return 0;
-        });
-        
-        const obj = {
-          [question]: finalItems,
-          softSkill: selectSoftSkill,
-        };
-        
-        scheme.push(obj);
-        
-        }
-      else if(selected[`${current}.1`] == "ปานกลาง" && selected[`${current}.3`] == "ไม่ทราบทักษะที่ควรพัฒนา" ){
-        console.log("in case ปานกลาง ไม่ทราบทักษะที่ควรพัฒนา")
-        const result = selectCourse[question].filter((item: any) =>
-          selected[`${current}.3`].includes(item.match)
-        );
-        
-        const unselectedItems = selectCourse[question].filter(
-          (item: any) => !selected[`${current}.3`].includes(item.match)
-        );
-        
-        let finalItems = [...result];
-        
-        if (result.length === 1 && unselectedItems.length > 0) {
-          const recommendItem = { ...unselectedItems[0], recommend: true };
-          finalItems.push(recommendItem); // ใส่ recommend ไว้ท้ายก่อน แล้วค่อย sort
-        }
-        
-        // 🔥 จัดเรียง: recommend=false อยู่ด้านหน้า
-        finalItems.sort((a, b) => {
-          if (a.recommend && !b.recommend) return 1;
-          if (!a.recommend && b.recommend) return -1;
-          return 0;
-        });
-        
-        const obj = {
-          [question]: finalItems,
-          softSkill: selectSoftSkill,
-        };
-        
-        scheme.push(obj);
-        
-        }
-        else if(selected[`${current}.1`] == "ปานกลาง"){
-          const result = selectCourse[question].filter((item: any) =>
-            selected[`${current}.3`].includes(item.match)
-          );
-          
-          const unselectedItems = selectCourse[question].filter(
-            (item: any) => !selected[`${current}.3`].includes(item.match)
-          );
-          
-          let finalItems = [...result];
-          
-          if (result.length === 1 && unselectedItems.length > 0) {
-            const recommendItem = { ...unselectedItems[0], recommend: true };
-            finalItems.push(recommendItem); 
-          }
-          
-         
-          finalItems.sort((a, b) => {
-            if (a.recommend && !b.recommend) return 1;
-            if (!a.recommend && b.recommend) return -1;
-            return 0;
-          });
-          
-          const obj = {
-            [question]: finalItems,
-            softSkill: selectSoftSkill,
-          };
-          
-          scheme.push(obj);
-          
-          }
-          else if (
-            selected[`${current}.1`] == "น้อย" &&
-           ( selected[`${current}.2`] == "อื่นๆ" || selected[`${current}.2`] == "ไม่ทราบ") && selected[`${current}.3`] == "ไม่ทราบทักษะที่ควรพัฒนา"
-          ) {
-             console.log("in case น้อย")
-            const mappedItems = [selectCourse[question][0]]
-            
-            // จัดเรียง: ไม่มี recommend อยู่ข้างหน้า
-            // const sortedItems = mappedItems.sort((a: any, b: any) => {
-            //   if (a.recommend && !b.recommend) return 1;  // ถ้ามี recommend มาไว้หลัง
-            //   if (!a.recommend && b.recommend) return -1; // ถ้าไม่มี recommend ให้ไปข้างหน้า
-            //   return 0;  // ถ้าทั้งคู่มีหรือไม่มี recommend อยู่แล้วก็ไม่เปลี่ยนแปลง
-            // });
-            
-            const obj = {
-              [question]: mappedItems,
-              softSkill: selectSoftSkill,
-            };
-            
-            scheme.push(obj);
-            }       
-            else if (
-              selected[`${current}.1`] == "น้อย" &&
-              (selected[`${current}.2`] != "อื่นๆ" || selected[`${current}.2`] != "ไม่ทราบ")
-            ) {
-              console.log("in case น้อย != อื่นๆ,ไม่ทราบ")
-              const result = [selectCourse[question][0]]
-              
-      
-              const obj = {
-                [question]: result,
-                softSkill: selectSoftSkill,
-              };
-              
-              // 
-              scheme.push(obj);
-            } 
-            
-          else if (
-            selected[`${current}.1`] == "น้อย" &&
-            selected[`${current}.2`] == "อื่นๆ"
-          ) {
-             console.log("in case น้อย")
-            const mappedItems = (selectCourse[question] || []).map((item: any) => {
-              
-              if (selected[`${current}.3`]) {
-                return { ...item, recommend: true };
-              }
-              return item;
-            });
-            
-            // จัดเรียง: ไม่มี recommend อยู่ข้างหน้า
-            const sortedItems = mappedItems.sort((a: any, b: any) => {
-              if (a.recommend && !b.recommend) return 1;  // ถ้ามี recommend มาไว้หลัง
-              if (!a.recommend && b.recommend) return -1; // ถ้าไม่มี recommend ให้ไปข้างหน้า
-              return 0;  // ถ้าทั้งคู่มีหรือไม่มี recommend อยู่แล้วก็ไม่เปลี่ยนแปลง
-            });
-            
-            const obj = {
-              [question]: sortedItems,
-              softSkill: selectSoftSkill,
-            };
-            
-            scheme.push(obj);
-            }                    
-       
-      else{
-         let clone: any = selectCourse[question];
-        console.log("in case else")
-        
-
-        const obj = {
-          [question]: {},
-          softSkill: selectSoftSkill,
-        };
-        
-        // 
-        scheme.push(obj);
       }
+    
+      else if (level === "ปานกลาง") {
+        if (selectedSkills === "ไม่ทราบทักษะที่ควรพัฒนา") {
+          finalCourses = getSortedCourses([], allCourses, 2);
+        } else if(selectedSkills == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"){
+          console.log("case ปานกลาง ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้")
+          finalCourses = getSortedCourses([], [],0);
+        }
+        else {
+          console.log("case ปานกลาง else")
+          const result = allCourses.filter((item: { match: string; }) => selectedSkills.includes(item.match));
+          const unselected = allCourses.filter((item: { match: string; }) => !selectedSkills.includes(item.match));
+          finalCourses = getSortedCourses(result, unselected, 2);
+        }
+      }
+    
+      else if (level === "น้อย") {
+        // console.log("selectedSkills ==> ",((knowledge == "อื่นๆ" || knowledge == "ไม่ทราบ") && selectedSkills.includes("ไม่ทราบทักษะที่ควรพัฒนา") == true) )
+         if(selectedSkills == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้"){
+          console.log("case ปานกลาง ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้")
+          finalCourses = getSortedCourses([], [],0);
+        }
+        else if ((knowledge == "อื่นๆ" || knowledge == "ไม่ทราบ") && selectedSkills.includes("ไม่ทราบทักษะที่ควรพัฒนา") == true) {
+          console.log("case อื่นๆ หรือ ไม่ทราบ & ไม่ทราบทักษะที่ควรพัฒนา")
+          finalCourses = [allCourses[0]];
+        } else if (knowledge !== "อื่นๆ" && knowledge !== "ไม่ทราบ") {
+          console.log("case อื่นๆ &&  ไม่ทราบ")
+          const result = allCourses.filter((item: { match: string; }) => selectedSkills.includes(item.match));
+          finalCourses = getSortedCourses(result, [], 2);
+        } else if (knowledge === "อื่นๆ") {
+          console.log("case อื่นๆ ")
+          finalCourses = allCourses.map((item: any) => ({ ...item, recommend: true }));
+          finalCourses = finalCourses.sort((a, b) => (a.recommend ? 1 : -1));
+        }
+      }
+    
+      scheme.push({
+        [question]: finalCourses,
+        softSkill,
+      });
     }
+    
     
 
     setCourse(scheme);
