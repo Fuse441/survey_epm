@@ -770,15 +770,10 @@ export default function Home() {
   isRequired
   className="col-span-1"
   errorMessage={
-    !form.user.phoneNumber
-      ? "กรุณากรอกเบอร์โทรศัพท์"
-      : form.user.phoneNumber.length !== 10
-      ? "เบอร์โทรศัพท์ต้องมี 10 หลัก"
-      : ""
+    !form.user.phoneNumber ? "กรุณากรอกเบอร์โทรศัพท์" : form.user.phoneNumber.length !== 10  ? "เบอร์โทรศัพท์ต้องมี 10 หลัก" : ""
   }
   isInvalid={
-    !form.user.phoneNumber ||
-    form.user.phoneNumber.length !== 10
+    form.user.phoneNumber.length != 10 &&  form.user.phoneNumber != ""
   }
   label="เบอร์โทรศัพท์"
   placeholder="กรอกเบอร์โทรศัพท์"
