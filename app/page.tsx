@@ -31,6 +31,8 @@ import { selectCourse, selectSoftSkill } from "@/config/selectCourse";
 import { stateQuestions } from "@/config/stateQuestions";
 import { IForm } from "@/interfaces/form";
 import { Spinner } from "@heroui/spinner";
+import { registrationNumber } from './../config/configForm';
+import { messageAuthen } from "@/config/message";
 
 export default function Home() {
   const [provideSkills,setProvideskills] = useState("")
@@ -94,6 +96,7 @@ export default function Home() {
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const [stateError, setStateError] = useState({
+  
     vaildate_EstablishmentName: {
       status: false,
     },
@@ -248,7 +251,19 @@ export default function Home() {
   const onSubmit =  async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true)    
+
+  //   const hasRegisNumber = !!form.regisNumber;
+  //   console.log("hasRegisNumber ==> ", hasRegisNumber);
+  // const hasInsuranceCode = !!form.insuranceCode;
+  // console.log("hasInsuranceCode ==> ", hasInsuranceCode);
+
+  // const vaildate_RegisNumber = !hasRegisNumber || !hasInsuranceCode;
+  // console.log("vaildate_RegisNumber ==> ", vaildate_RegisNumber);
+  // const vaildatedate_InsuranceCode = !hasRegisNumber || !hasInsuranceCode;
+  // console.log("vaildatedate_InsuranceCode ==> ", vaildatedate_InsuranceCode);
     const validationErrors = {
+      // vaildate_RegisNumber,
+      // vaildatedate_InsuranceCode,
       vaildate_EstablishmentName: !form.establishmentName,
       vaildate_Branch: !form.branch,
       vaildate_TypeBusiness: !form.typeBusiness,
@@ -267,7 +282,7 @@ export default function Home() {
     
     await Promise.all(
       Object.entries(validationErrors).map(async ([key, value]) => {
-        console.log("key, value ==> ", key, value);
+      
         await updateStatus(key, value === true);
       })
     );
@@ -434,22 +449,20 @@ export default function Home() {
     <>
     <div>
     {showSuccess ? (
-  <Modal isOpen={true} onOpenChange={() => setShowSuccess(false)} hideCloseButton={true}>
+  <Modal isOpen={true} onOpenChange={() => setShowSuccess(false)} hideCloseButton={true} size="2xl">
     <ModalContent>
       {(onClose) => (
         <>
-          <ModalHeader className="flex flex-col gap-1">ขอบคุณที่สมัคร!</ModalHeader>
+          <ModalHeader className="flex flex-col gap-1">เราได้รับข้อมูลของท่านเรียบร้อยแล้ว</ModalHeader>
           <ModalBody>
-            <p>
+            <p className="whitespace-pre-line">
               {
-                isAuthen ? "ขอบคุณที่เข้ามาใช้งานเว็บไซต์ของเรา แต่เนื่องจากคุณได้กรอกข้อมูลเรียบร้อยแล้วและเราได้รับข้อมูลของคุณแล้ว" : `ขอบคุณที่สมัครและกรอกข้อมูลเรียบร้อยแล้ว! เราได้รับข้อมูลของคุณแล้วและขอแจ้งให้ทราบว่า
-              หลังจากนี้คุณจะไม่สามารถเข้ามาในเว็บนี้ได้อีก เนื่องจากคุณได้ทำการสมัครเสร็จสิ้นแล้ว`
+                isAuthen ? `${messageAuthen.isAuthen}` : `${messageAuthen.notAuthen}`
               }
              
             </p>
             <p>
-              หากคุณมีข้อสงสัยหรือคำถามเพิ่มเติมเกี่ยวกับการสมัครหรือลงทะเบียน,
-              โปรดติดต่อทีมงานของเราเพื่อขอความช่วยเหลือ
+            หากมีข้อสงสัยหรือต้องการสอบถามเพิ่มเติม ทีมงานของเราพร้อมให้ความช่วยเหลือเสมอ
             </p>
           </ModalBody>
           <ModalFooter>
@@ -659,12 +672,12 @@ export default function Home() {
                   isRequired
                   isVirtualized
                   className="col-span-1"
-                  errorMessage={"กรุณาเลือกอำเภอ"}
+                  errorMessage={"กรุณาเลือก อำเภอ/เขต"}
                   isInvalid={
                     !form.user.district && stateError.vaildate_District.status
                   }
-                  label="อำเภอ"
-                  placeholder="เลือกอำเภอ"
+                  label="อำเภอ/เขต"
+                  placeholder="อำเภอ/เขต"
                   value={form.user.district}
                   onInputChange={(event) => {
                     handleChange({ name: "district", value: event });
@@ -682,13 +695,13 @@ export default function Home() {
                   isRequired
                   isVirtualized
                   className="col-span-1"
-                  errorMessage={"กรุณาเลือกตำบล"}
+                  errorMessage={"กรุณาเลือก ตำบล/แขวง"}
                   isInvalid={
                     !form.user.subdistrict &&
                     stateError.vaildate_SubDistrict.status
                   }
-                  label="ตำบล"
-                  placeholder="เลือกตำบล"
+                  label="ตำบล/แขวง"
+                  placeholder="เลือก ตำบล/แขวง"
                   value={form.user.subdistrict}
                   onInputChange={(event) => {
                     handleChange({ name: "subdistrict", value: event });
@@ -753,22 +766,30 @@ export default function Home() {
                     handleChange({ name: "lastName", value: event.target.value });
                   }}
                 />
-                <Input
-                  isRequired
-                  className="col-span-1"
-                  errorMessage={"กรุณากรอกเบอร์โทรศัพท์"}
-                  isInvalid={
-                    !form.user.phoneNumber &&
-                    stateError.vaildate_PhoneNumber.status
-                  }
-                  label="เบอร์โทรศัพท์"
-                  placeholder="กรอกเบอร์โทรศัพท์"
-                  type="number"
-                  value={form.user.phoneNumber}
-                  onChange={(event) => {
-                    handleChange({ name: "phoneNumber", value: event.target.value });
-                  }}
-                />
+               <Input
+  isRequired
+  className="col-span-1"
+  errorMessage={
+    !form.user.phoneNumber
+      ? "กรุณากรอกเบอร์โทรศัพท์"
+      : form.user.phoneNumber.length !== 10
+      ? "เบอร์โทรศัพท์ต้องมี 10 หลัก"
+      : ""
+  }
+  isInvalid={
+    !form.user.phoneNumber ||
+    form.user.phoneNumber.length !== 10
+  }
+  label="เบอร์โทรศัพท์"
+  placeholder="กรอกเบอร์โทรศัพท์"
+  type="tel"
+  value={form.user.phoneNumber}
+  onChange={(event) => {
+    const input = event.target.value.replace(/\D/g, ""); // ลบ non-digit
+    handleChange({ name: "phoneNumber", value: input });
+  }}
+/>
+
                 <Input
                   isRequired
                   className="col-span-3"
