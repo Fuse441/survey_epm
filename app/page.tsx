@@ -814,20 +814,32 @@ export default function Home() {
                     handleChange({ name: "position", value: event.target.value });
                   }}
                 />
-               
-                <div className="questions col-span-3 mt-3">
-                <Divider/>
-                  <h1 className="text-xl">แบบสอบถาม</h1>
-                  {/* <pre>{JSON.stringify(selected, null, 2)}</pre> */}
-
-                  <Questions selected={selected} setSelected={setSelected} />
                 </div>
-               
-                 <h1 className="mx-2 mt-3 text-xl col-span-3 text-stone-950">
+                </CardBody>
+            <CardFooter />
+          </Card>
+                  <Card className="w-full">
+                  <div className="questions col-span-3 mt-3">
+              <CardHeader>
+              <h1 className="text-xl">แบบสอบถาม</h1>
+              </CardHeader>
+           <CardBody>
+           <Questions selected={selected} setSelected={setSelected} />
+           </CardBody>
+              {/* <pre>{JSON.stringify(selected, null, 2)}</pre> */}
+
+            
+            </div>
+                  </Card>
+                  
+               <Card className="w-full px-3 ">
+                <CardHeader>
+                <h1 className="mx-2 mt-3 text-xl col-span-3 text-stone-950">
           ปัจจุบันบริษัทของท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน หรือไม่?
-        </h1> 
-                
-              <RadioGroup
+        </h1>
+                </CardHeader>
+                <CardBody className="w-full m-3">  
+                <RadioGroup
                 className="col-span-3"
                 defaultValue="has"
                 label="ปัจจุบันบริษัทของท่านมีการอบรมหรือพัฒนาทักษะให้กับพนักงาน"
@@ -845,10 +857,16 @@ export default function Home() {
                   <Radio value="dontHas">ไม่มี</Radio>
                 </div>
               </RadioGroup>
+
+                </CardBody>
+               </Card>
+               
+                
+             
           
-              </div>
+              {/* </div> */}
               <Button
-                className="text-sky-50 mt-5"
+                className="text-sky-50 mt-5 w-full"
                 color="primary"
                 type="submit"
 
@@ -1030,9 +1048,7 @@ export default function Home() {
                   )}
                 </ModalContent>
               </Modal>
-            </CardBody>
-            <CardFooter />
-          </Card>
+           
         </section>
       </Form>
           </>
