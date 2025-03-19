@@ -63,7 +63,7 @@ export default function DashBoardPage() {
       
       setResult(getData?.result || []);
       setTotal(getData?.total.values || 0);
-       const sort = topLearn(result);
+       const sort = topLearn(getData?.result);
 
     
        setTop(sort);
