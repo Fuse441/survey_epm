@@ -115,7 +115,7 @@ export const radar = (response: any) => {
 export const doughnut = (response: any) => {
   let totalLabel = 0;
   let totalSoftskill = 0;
-
+  let totalRecommandCoures = 0;
   if (response) {
     const object = response
 
@@ -124,25 +124,37 @@ export const doughnut = (response: any) => {
       array.data.forEach((dept: any) => {
         totalLabel += dept.label?.length || 0;
         totalSoftskill += dept.softskill?.length || 0;
+        totalRecommandCoures += dept.recommandList?.length || 0;
+        
       });
     });
   }
 
-  const total = totalLabel + totalSoftskill;
+  const total = totalLabel + totalSoftskill + totalRecommandCoures;
   const percentLabel = ((totalLabel / total) * 100).toFixed(2);
   const percentSoftskill = ((totalSoftskill / total) * 100).toFixed(2);
+  const percentRecommandCourse = ((totalRecommandCoures / total) * 100).toFixed(2);
 
   return {
     labels: [
       "หลักสูตรเชิงเทคนิค (Hard Skill)",
       "หลักสูตรทักษะเสริม (Soft Skill)",
+      "หลักสูตรที่แนะนำ (Recommanded Course)"
     ],
     datasets: [
       {
         label: "อัตราส่วน (ร้อยละ)",
-        data: [Number(percentLabel), Number(percentSoftskill)],
-        backgroundColor: ["rgba(54, 162, 235, 0.5)", "rgba(255, 206, 86, 0.5)"],
-        borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 206, 86, 1)"],
+        data: [Number(percentLabel), Number(percentSoftskill),Number(percentRecommandCourse)],
+        backgroundColor: [
+          "rgba(54, 162, 235, 0.5)",    // ฟ้า
+          "rgba(255, 206, 86, 0.5)",    // เหลือง
+          "rgba(75, 192, 135, 0.5)"     // เขียวมินต์
+        ],
+        borderColor: [
+          "rgba(54, 162, 235, 1)",      // ฟ้าเข้ม
+          "rgba(255, 206, 86, 1)",      // เหลืองเข้ม
+          "rgba(75, 192, 192, 1)"       // เขียวเข้ม
+        ],
         borderWidth: 1,
       },
     ],
@@ -163,14 +175,18 @@ export const bar = (response: any) => {
     "Sales",
   ];
 
-  let department: { [key: string]: number } = {};
+  let technicalCourses: { [key: string]: number } = {};
+  let softSkillsCourses: { [key: string]: number } = {};
+  let recommandSkillsCourses: { [key: string]: number } = {};
 
   departments.forEach((dept) => {
-    department[dept] = 0;
+    technicalCourses[dept] = 0;
+    softSkillsCourses[dept] = 0;
+    recommandSkillsCourses[dept] = 0;
   });
 
   if (response) {
-    const object = response
+    const object = response;
 
     object.forEach((array: any) => {
       array.data.forEach((element: any) => {
@@ -179,7 +195,9 @@ export const bar = (response: any) => {
         );
 
         if (matchedDept) {
-          department[matchedDept] += element.label?.length || 0;
+          technicalCourses[matchedDept] += element.label?.length || 0;
+          softSkillsCourses[matchedDept] += element.softskill?.length || 0;
+          recommandSkillsCourses[matchedDept] += element.recommandList?.length || 0;
         }
       });
     });
@@ -187,14 +205,30 @@ export const bar = (response: any) => {
 
   return {
     labels: departments,
+ 
     datasets: [
       {
-        label: "จำนวนหลักสูตรที่ต้องเรียนรู้ในแต่ละแผนก",
-        data: departments.map((dept) => department[dept]),
+        label: "หลักสูตรเชิงเทคนิค (Hard Skill)",
+        data: departments.map((dept) => technicalCourses[dept]),
         backgroundColor: "rgba(75, 192, 192, 0.5)",
         borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "หลักสูตรทักษะเสริม (Soft Skill)",
+        data: departments.map((dept) => softSkillsCourses[dept]),
+        backgroundColor: "rgba(255, 159, 64, 0.5)",
+        borderColor: "rgba(255, 159, 64, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "หลักสูตรที่แนะนำ (Recommanded Course)",
+        data: departments.map((dept) => recommandSkillsCourses[dept]),
+        backgroundColor: "rgba(35, 90, 180, 0.5)",
+        borderColor: "rgba(0, 73, 182, 0.37)",
         borderWidth: 1,
       },
     ],
   };
 };
+

@@ -126,6 +126,7 @@ export default function LoginPage() {
         } else {
           router.push("/");
         }
+        
         // router.push("/")
       } else if (res.status === 400) {
         addToast({

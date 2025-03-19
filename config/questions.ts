@@ -28,6 +28,33 @@ export const questions = [
           "ไม่ทราบ",
           "อื่นๆ"
         ],
+        Recommended: [
+          {
+            name : "การออกแบบและบริหารระบบเครือข่าย (Network Design & Administration)",
+            description : ["เน้นการออกแบบและตั้งค่าเครือข่ายให้มีประสิทธิภาพ","เรียนรู้ขั้นพื้นฐานจนถึงขั้นสูงของการทำงานกับอุปกรณ์เครือข่าย เช่น Router, Switch, Firewall"],
+            courseList :"CCNA, CCNP, CompTIA Network+ และ JNCIA"
+          },{
+            name: "การบริหารระบบคลาวด์ (AWS, Azure, Google Cloud)",
+            description : ["เรียนรู้โครงสร้างพื้นฐานระบบคลาวด์ และการตั้งค่า Infrastructure as Code (IaC)","เรียรรู้การบริหารและออกแบบระบบให้ปลอดภัยและมีประสิทธิภาพ บน AWS, Azure, GCP"],
+            courseList :"AWS Solutions Architect, Azure Administrator, Google Cloud Architect และ Terraform Training"
+          },{
+            name: "การบริหารจัดการเซิร์ฟเวอร์ (Linux/Windows Server Administration)",
+            description : ["ดูแลและจัดการระบบปฏิบัติการเซิร์ฟเวอร์ ทั้ง Windows และ Linux","เน้น การตั้งค่า บำรุงรักษา และแก้ไขปัญหาการทำงานของเซิร์ฟเวอร์"],
+            courseList :"RHCSA, LPIC-1, Windows Server Administrator และ CompTIA Linux+"
+          },{
+            name: "การรักษาความปลอดภัยทางไซเบอร์ (Cybersecurity & Firewall Management)",
+            description : ["เสริมทักษะด้านความปลอดภัยไซเบอร์และป้องกันการโจมตี","ความรู้ในเรื่อง Firewall, Penetration Testing, Security Architecture"],
+            courseList :"CEH, Security+, CISSP, Fortinet NSE และ Palo Alto PCNSE"
+          },{
+            name: "การบริหารและดูแลศูนย์ข้อมูล (Data Center & Virtualization)",
+            description : ["เรียนรู้การจัดการโครงสร้างพื้นฐานของศูนย์ข้อมูลและการทำ Virtualization","เรียนรู้ VMware, Cisco Data Center, Cloud-based Data Centers"],
+            courseList :"VCP-DCV, Cisco Data Center Specialist และ Azure Solutions Architect"
+          },{
+            name: "การใช้เครื่องมือมอนิเตอร์ระบบ (Nagios, Splunk, Zabbix ฯลฯ)",
+            description : ["เรียนรู้การใช้เครื่องมือมอนิเตอร์ระบบเพื่อเฝ้าระวังและวิเคราะห์ปัญหา","การใช้งาน Nagios, Splunk, Zabbix, ELK Stack"],
+            courseList :"Splunk Fundamentals, Nagios Certified, Zabbix Specialist และ ELK Stack Training"
+          }
+        ],
       },
       {
         id: "01",

@@ -3,7 +3,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Network Design & Administration",
       match: "Cloud Computing & Cloud Security",
-      deltail: [
+      detail: [
         "ความรู้พื้นฐานเกี่ยวกับระบบเครือข่ายคอมพิวเตอร์",
         "การออกแบบโครงสร้างเครือข่ายให้ปลอดภัยและเสถียร",
         "การตั้งค่าอุปกรณ์เครือข่าย (Switch, Router, Firewall)",
@@ -17,7 +17,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Cybersecurity & Ethical Hacking",
       match: "Cybersecurity & Ethical Hacking",
-      deltail: [
+      detail: [
         "หลักการพื้นฐานด้านความปลอดภัยไซเบอร์",
         "การวิเคราะห์ช่องโหว่และการเจาะระบบเพื่อป้องกันภัยคุกคาม",
         "เทคนิคการป้องกันการโจมตีทางไซเบอร์",
@@ -31,7 +31,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร IT Infrastructure & Cloud Management",
       match: "Automation & Infrastructure as Code (IaC)",
-      deltail: [
+      detail: [
         "การออกแบบและตั้งค่าระบบเครือข่าย (LAN, WAN, VLAN, VPN)",
         "การบริหารจัดการอุปกรณ์เครือข่าย (Switch, Router, Firewall)",
         "การติดตั้งและดูแลระบบคลาวด์สำหรับองค์กร",
@@ -49,7 +49,7 @@ export const selectCourse: any = {
     {
       label: `Software Enterprise Services (ฝ่ายบริการซอฟต์แวร์ธุรกิจองค์กร) หลักสูตรพื้นฐาน Introduction to ERP Systems (SAP, Oracle, Microsoft Dynamics)`,
       match: "Enterprise Resource Planning (ERP) Implementation",
-      deltail: [
+      detail: [
         "ทำความเข้าใจระบบ ERP และการนำมาใช้ในองค์กร",
         "การตั้งค่าและปรับแต่งโมดูล ERP เบื้องต้น",
         "การใช้งานฟังก์ชันหลักของ ERP เช่น การเงิน การบัญชี ฯลฯ",
@@ -63,7 +63,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร SQL & NoSQL Database Management",
       match: "Data Analytics & Business Intelligence",
-      deltail: [
+      detail: [
         "การบริหารฐานข้อมูล SQL และ NoSQL",
         "การออกแบบฐานข้อมูลให้รองรับปริมาณข้อมูลที่เพิ่มขึ้น",
         "การใช้คำสั่ง SQL Query และการจัดการฐานข้อมูลแบบ NoSQL เช่น MongoDB",
@@ -78,7 +78,7 @@ export const selectCourse: any = {
       label:
         "หลักสูตร Data Analytics & Business Intelligence (Power BI, Tableau)",
       match: "AI & Process Automation",
-      deltail: [
+      detail: [
         "การใช้ Power BI และ Tableau วิเคราะห์ข้อมูลธุรกิจ",
         "การใช้ Power BI และ Tableau วิเคราะห์ข้อมูลธุรกิจ",
         "เทคนิคการนำเสนอข้อมูลให้เกิดการตัดสินใจที่แม่นยำ",
@@ -94,7 +94,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตรพื้นฐาน IT Support & Helpdesk Essentials",
       match: "IT Support & Helpdesk with AI Integration",
-      deltail: [
+      detail: [
         "เทคนิคการแก้ปัญหาด้านไอทีเบื้องต้น",
         "การสนับสนุนผู้ใช้ (User Support) และการสื่อสารกับลูกค้า",
         "วิธีป้องกันและแก้ไขปัญหาด้านฮาร์ดแวร์และซอฟต์แวร์",
@@ -108,7 +108,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Endpoint Security & Data Protection",
       match: "Endpoint Security & Zero Trust Architecture",
-      deltail: [
+      detail: [
         "พื้นฐานการรักษาความปลอดภัยของอุปกรณ์ปลายทาง (Endpoint Security)",
         "การป้องกันมัลแวร์และภัยคุกคามทางไซเบอร์",
         "การตั้งค่าความปลอดภัยข้อมูลและการสำรองข้อมูล",
@@ -122,7 +122,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร ITIL & IT Service Management",
       match: "ITIL & IT Service Management",
-      deltail: [
+      detail: [
         "การจัดการบริการไอที (IT Service Management) ตามมาตรฐาน ITIL",
         "การบริหาร Incident, Problem, Change Management",
         "การออกแบบและวางแผนบริการไอทีอย่างมีประสิทธิภาพ",
@@ -139,7 +139,7 @@ export const selectCourse: any = {
       label:
         "หลักสูตรพื้นฐาน Full-Stack Web Development (React, Node.js, Python)",
       match: "Full-Stack Development",
-      deltail: [
+      detail: [
         "พื้นฐานการพัฒนาเว็บแอปพลิเคชันแบบ Full-Stack",
         "การใช้ React และ Node.js สร้างเว็บแอปพลิเคชันที่มีประสิทธิภาพ",
         "การพัฒนา API และการจัดการฐานข้อมูลด้วย MongoDB, MySQL",
@@ -153,7 +153,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร DevOps & CI/CD with Docker & Kubernetes",
       match: "DevOps & CI/CD",
-      deltail: [
+      detail: [
         "การนำ DevOps มาใช้เพื่อเพิ่มประสิทธิภาพในกระบวนการพัฒนา",
         "การตั้งค่า CI/CD Pipeline ด้วย Jenkins และ GitHub Actions",
         "การใช้ Docker & Kubernetes เพื่อบริหารจัดการแอปพลิเคชัน",
@@ -167,7 +167,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร AI & Machine Learning Development",
       match: "AI & Machine Learning Development",
-      deltail: [
+      detail: [
         "พื้นฐานการพัฒนา AI และ Machine Learning",
         "การใช้ TensorFlow, PyTorch ในการสร้างโมเดล AI",
         "การนำ AI มาปรับใช้ในงานพัฒนาซอฟต์แวร์",
@@ -184,7 +184,7 @@ export const selectCourse: any = {
       label:
         "หลักสูตรพื้นฐาน Digital Accounting & Excel for Financial Analysis",
       match: "Data Analytics for Finance",
-      deltail: [
+      detail: [
         "การใช้ Microsoft Excel วิเคราะห์ข้อมูลทางการเงิน",
         "การจัดทำงบการเงินและวิเคราะห์งบการเงิน",
         "การใช้ซอฟต์แวร์บัญชีดิจิทัล",
@@ -198,7 +198,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Regulatory Compliance & Taxation",
       match: "Blockchain & Digital Payment Systems",
-      deltail: [
+      detail: [
         "กฎหมายและมาตรฐานบัญชีที่เกี่ยวข้อง",
         "การบริหารภาษีและการคำนวณภาษีที่ถูกต้อง",
         "การตรวจสอบภายในและการควบคุมบัญชี",
@@ -212,7 +212,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Financial Data Analytics",
       match: "Regulatory Compliance & International Taxation",
-      deltail: [
+      detail: [
         "การวิเคราะห์ข้อมูลทางการเงินด้วยโมเดลคาดการณ์",
         "การใช้ Power BI, Python, R ในการวิเคราะห์ข้อมูล",
         "การคาดการณ์แนวโน้มทางการเงินและการบริหารความเสี่ยง",
@@ -228,7 +228,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร HR Digital Transformation & HRIS",
       match: "HR Analytics & People Data Science",
-      deltail: [
+      detail: [
         "การใช้ HR Technology (HRIS, SAP SuccessFactors, Workday)",
         "การบริหารงานบุคคลแบบดิจิทัล",
         "แนวทางปรับองค์กรให้เข้าสู่ยุค HR 4.0",
@@ -242,7 +242,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Payroll & Benefits Management",
       match: "HR Technology (HRIS, Workday, SAP SuccessFactors)",
-      deltail: [
+      detail: [
         "การคำนวณเงินเดือน สวัสดิการ และค่าตอบแทนพนักงาน",
         "การจัดการภาษีหัก ณ ที่จ่าย และประกันสังคม",
         "การใช้ซอฟต์แวร์จัดการเงินเดือน",
@@ -256,7 +256,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร HR Analytics & People Data Science",
       match: "Employer Branding & Employee Experience Design",
-      deltail: [
+      detail: [
         "การวิเคราะห์ข้อมูลพนักงานเพื่อพัฒนาการบริหาร HR",
         "การใช้ Power BI และ Python วิเคราะห์แนวโน้มพนักงาน",
         "กลยุทธ์การจัดการพนักงานโดยใช้ Machine Learning",
@@ -272,7 +272,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตรพื้นฐาน Office Management & Digital Document Handling",
       match: "Digital Office Management",
-      deltail: [
+      detail: [
         "พื้นฐานการบริหารงานธุรการในองค์กรยุคดิจิทัล",
         "การจัดการเอกสารอิเล็กทรอนิกส์ (E-Document) และระบบจัดเก็บเอกสาร",
         "การบริหารงานเอกสารและข้อมูลให้เป็นระบบ ลดความผิดพลาดในการทำงาน",
@@ -286,7 +286,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร E-Document & Workflow Automation",
       match: "E-Document & Workflow Automation",
-      deltail: [
+      detail: [
         "การใช้ซอฟต์แวร์และระบบอัตโนมัติในการจัดการเอกสาร",
         "ระบบ OCR (Optical Character Recognition) สำหรับแปลงเอกสารเป็นข้อมูลดิจิทัล",
         "การใช้ Power Automate และ Zapier เพื่อลดภาระงานซ้ำซ้อน",
@@ -300,7 +300,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Project Coordination Tools (Trello, Asana, Notion)",
       match: "Project Coordination Tools",
-      deltail: [
+      detail: [
         "การใช้เครื่องมือบริหารโครงการ Trello, Asana, Notion ในการติดตามงาน",
         "วิธีการจัดการงานและการสื่อสารระหว่างทีมอย่างมีประสิทธิภาพ",
         "การสร้าง Dashboard และ Kanban Board เพื่อวางแผนและติดตามงาน",
@@ -316,7 +316,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Procurement & Supply Chain Fundamentals",
       match: "E-Procurement & Supply Chain Analytics",
-      deltail: [
+      detail: [
         "กระบวนการจัดซื้อจัดหา (Procurement Process) และการจัดการซัพพลายเชน",
         "การเลือกซัพพลายเออร์และวิเคราะห์ต้นทุนในการจัดซื้อ",
         "แนวปฏิบัติด้าน Just-in-Time (JIT) และ Lean Procurement",
@@ -330,7 +330,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร E-Procurement & Digital Supply Chain Analytics",
       match: "Sustainable Procurement & ESG Compliance",
-      deltail: [
+      detail: [
         "การใช้เทคโนโลยี E-Procurement เพื่อบริหารจัดซื้อแบบดิจิทัล",
         "การใช้ AI และ Machine Learning วิเคราะห์แนวโน้มซัพพลายเชน",
         "การใช้ Power BI และ Tableau วิเคราะห์ข้อมูลซัพพลายเชน",
@@ -344,7 +344,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Sustainable Procurement & ESG Compliance",
       match: "Data-Driven Decision Making in Procurement",
-      deltail: [
+      detail: [
         "การจัดซื้อจัดจ้างตามมาตรฐาน ESG (Environmental, Social, and Governance)",
         "การประเมินความเสี่ยงของซัพพลายเออร์และแนวปฏิบัติด้านความยั่งยืน",
         "การนำแนวคิด Circular Economy มาใช้ในการบริหารจัดซื้อ",
@@ -360,7 +360,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Project Management Essentials (Waterfall, Agile, Scrum)",
       match: "Agile & Scrum Mastery",
-      deltail: [
+      detail: [
         "พื้นฐานการบริหารโครงการตามแนวทาง Waterfall และ Agile",
         "การใช้ Scrum Framework ในการบริหารโครงการซอฟต์แวร์",
         "การกำหนดเป้าหมายโครงการและการบริหารทรัพยากร",
@@ -374,7 +374,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Project Financial Management",
       match: "Risk Management & Change Management",
-      deltail: [
+      detail: [
         "การบริหารงบประมาณและต้นทุนโครงการ",
         "การวิเคราะห์ต้นทุนและคำนวณ ROI (Return on Investment)",
         "การใช้ Microsoft Project และ Excel คำนวณงบประมาณโครงการ",
@@ -390,7 +390,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Using CRM Tools (Salesforce, HubSpot)",
       match: "Data-Driven Sales & CRM Management",
-      deltail: [
+      detail: [
         "การใช้งาน CRM (Customer Relationship Management) บริหารงานขาย",
         "การติดตามลูกค้าและการวิเคราะห์พฤติกรรมลูกค้า",
         "การใช้ Automated Sales Pipelines เพิ่มประสิทธิภาพงานขาย",
@@ -404,7 +404,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร B2B Sales & Solution Selling",
       match: "B2B Sales & Solution Selling",
-      deltail: [
+      detail: [
         "กลยุทธ์การขายในตลาดองค์กร (B2B Sales)",
         "เทคนิคการนำเสนอและปิดการขายแบบ Solution Selling",
         "การใช้ Consultative Selling Approach เพื่อสร้างความสัมพันธ์กับลูกค้า",
@@ -418,7 +418,7 @@ export const selectCourse: any = {
     {
       label: "หลักสูตร Data-Driven Sales & AI in Marketing",
       match: "Digital Marketing & Social Selling",
-      deltail: [
+      detail: [
         "การใช้ AI และ Big Data วิเคราะห์พฤติกรรมลูกค้า",
         "การวิเคราะห์ Sales Metrics & KPIs เพื่อพัฒนาการขาย",
         "การใช้ Predictive Analytics ทำนายแนวโน้มตลาด",
@@ -437,7 +437,7 @@ export const selectSoftSkill: any = {
     {
       label: "หลักสูตร Network Design & Administration",
       match: "Cloud Computing & Cloud Security",
-      deltail: [
+      detail: [
         "เทคนิคการสื่อสารในที่ทำงานอย่างมืออาชีพ",
         "Storytelling & Presentation Skills เพื่อการนำเสนอที่น่าสนใจ",
         "Active Listening & Nonverbal Communication การฟังอย่างมีประสิทธิภาพ",
@@ -456,7 +456,7 @@ export const selectSoftSkill: any = {
       label:
         "หลักสูตร Problem Solving & Leadership in the Digital Age (การคิดเชิงวิเคราะห์ การบริหารทีม และการแก้ปัญหา)",
       match: "Cloud Computing & Cloud Security",
-      deltail: [
+      detail: [
         "Critical Thinking Frameworks (SWOT Analysis, Root Cause Analysis, 5 Whys)",
         "Structured Problem Solving  วิธีการวิเคราะห์ปัญหาอย่างเป็นระบบ",
         "การใช้ Design Thinking เพื่อพัฒนานวัตกรรมในองค์กร",
@@ -474,7 +474,7 @@ export const selectSoftSkill: any = {
       label:
         "หลักสูตร Productivity, Adaptability & Stress Management (การบริหารเวลา ความยืดหยุ่น และการจัดการความเครียด)",
       match: "Cloud Computing & Cloud Security",
-      deltail: [
+      detail: [
         "เทคนิคการจัดลำดับความสำคัญของงาน (Eisenhower Matrix, Pomodoro Technique)",
         "Digital Tools for Productivity (Google Calendar, Microsoft Outlook, Notion)",
         "Growth Mindset & Adaptability  การปรับตัวในยุค Digital Transformation",
