@@ -70,19 +70,29 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      return router.push("/login");
-    }
-
+    setLoading(true)
     const data = localStorage.getItem("token");
     const decrypt_token = CryptoJS.AES.decrypt(
       JSON.parse(data!),
       "emp"
     ).toString(CryptoJS.enc.Utf8);
+    if (!localStorage.getItem("token")) {
+     
+      return router.push("/login");
+
+    }
+
+    if(JSON.parse(decrypt_token).role == "admin"){
+    
+      return router.push("/dashboard");
+    }
+ 
     if (JSON.parse(decrypt_token).status) {
       setIsAuthen(true);
       setShowSuccess(true);
+      setLoading(false)
     }
+    
   }, []);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

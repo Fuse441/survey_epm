@@ -121,8 +121,8 @@ export default function LoginPage() {
           CryptoJS.enc.Utf8
         );
         if (JSON.parse(decrypt_token).role == "admin") {
-          router.push("/dashboard");
-          setLoading(false);
+         return router.push("/dashboard");
+         
         } else {
           router.push("/");
         }
