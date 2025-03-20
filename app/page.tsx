@@ -90,9 +90,9 @@ export default function Home() {
     if (JSON.parse(decrypt_token).status) {
       setIsAuthen(true);
       setShowSuccess(true);
-      setLoading(false)
+  
     }
-    
+    setLoading(false)
   }, []);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
