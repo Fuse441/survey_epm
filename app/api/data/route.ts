@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     query.business = business;
   }
 
-  if(size != "ทุกขนาด"){
+  if(size != "all"){
     query.size = size;
   }
   console.log(query)

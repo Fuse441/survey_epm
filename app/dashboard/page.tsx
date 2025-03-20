@@ -41,7 +41,7 @@ export default function DashBoardPage() {
   const [top, setTop] = React.useState<any>();
   const emote = ["🥇", "🥈", "🥉", "🏅", "🏅"];
   const [total,setTotal] = React.useState<Number>(0);
-  const [filterSize,setSize] = React.useState<string>("ทุกขนาด");
+  const [filterSize,setSize] = React.useState<any>("all");
   const [filterBusinessType,setBusinessType] = React.useState<string>("ทั้งหมด");
   const size = ["ทุกขนาด","น้อยกว่า 10 คน","10-19 คน","20-49 คน","50-99 คน","100-199 คน","200 คนขึ้นไป"]
   const [isLoading,setLoading] = React.useState<boolean>(false)
@@ -135,30 +135,20 @@ export default function DashBoardPage() {
           <div className="flex gap-3 justify-end">
           <Autocomplete
   className="w-[250px]"
-
- defaultSelectedKey={1}
   label="เลือกขนาดกิจการ"
   placeholder="เลือกขนาดกิจการ"
-  onInputChange={setSize}
-  defaultInputValue={"ทุกขนาด"}
+  defaultSelectedKey="all"
+  onSelectionChange={setSize}
 >
-  
-  {
-   
-   size && size.length > 0 ? (
-    size.map((element:any, index:number) => (
-       
-        
-          (
-            <AutocompleteItem key={`${index}`}>{element}</AutocompleteItem>
-          )
-          )
-      ))
-    : (
-      <AutocompleteItem>ไม่มีข้อมูล</AutocompleteItem> // fallback value when no data is available
-    )
-  }
+  <AutocompleteItem key="all">ทุกขนาด</AutocompleteItem>
+  <AutocompleteItem key="less-10">น้อยกว่า 10 คน</AutocompleteItem>
+  <AutocompleteItem key="10-19">10-19 คน</AutocompleteItem>
+  <AutocompleteItem key="20-49">20-49 คน</AutocompleteItem>
+  <AutocompleteItem key="50-99">50-99 คน</AutocompleteItem>
+  <AutocompleteItem key="100-199">100-199 คน</AutocompleteItem>
+  <AutocompleteItem key="more-200">200 คนขึ้นไป</AutocompleteItem>
 </Autocomplete>
+
       <Autocomplete
   className="w-[500px]"
   label="เลือกประเภทกิจการ"
