@@ -9,7 +9,8 @@ export async function POST(req: NextRequest) {
  
   const collection = await ConnectMongo("departmentSkills")
   try {
-     await collection.insertOne({data : body})
+     await collection.insertOne({
+      buisness : body.buisness,size:body.size ,data : body.data})
       return NextResponse.json({
         message : "บันทึกข้อมูลสำเร็จ"
       })
@@ -25,18 +26,33 @@ export async function POST(req: NextRequest) {
   
 }
 
-export async function GET() {
-  const collection = await ConnectMongo("departmentSkills")
- const data = await collection.find({}).toArray()
-//  console.log("data ==> ", data);
- 
-    try {
-      return NextResponse.json({
-        message : "ดึงข้อมูลสำเร็จ",
-        values : data
-      })
-    } catch (err) {
-      console.error("Error parsing existing JSON:", err);
-    }
-  
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+
+  const business = searchParams.get("business"); // ดึง query string
+  const size = searchParams.get("size");
+
+  const query: any = {};
+
+  if(business != "ทั้งหมด"){
+    query.business = business;
+  }
+
+  if(size != "ทุกขนาด"){
+    query.size = size;
+  }
+  console.log(query)
+
+  try {
+    const collection = await ConnectMongo("departmentSkills");
+    const data = await collection.find(query).toArray();
+
+    return NextResponse.json({
+      message: "ดึงข้อมูลสำเร็จ",
+      values: data,
+    });
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    return NextResponse.json({ message: "เกิดข้อผิดพลาด", error: err }, { status: 500 });
+  }
 }

@@ -193,8 +193,6 @@ export default function Home() {
 
       return {
         department: departmentName,
-        buisness : form.typeBusiness,
-        size : form.size,
         label: labelList,
         softskill: softSkillList,
         recommandList : recommandList
@@ -206,7 +204,11 @@ export default function Home() {
     const res = await fetch("/api/data", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(resultArray),
+      body: JSON.stringify({
+        business: form.typeBusiness,
+        size : form.size,
+        data: resultArray, 
+      }),
     });
 
     const data = localStorage.getItem("token");

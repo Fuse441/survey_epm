@@ -21,6 +21,7 @@ import { bar, doughnut, radar, topLearn } from "@/config/dashboard";
 import { DepartmentIcon, UsersIcon } from "@/components/icons";
 import { Chip } from "@heroui/chip";
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
+import { typeOfBusiness } from "@/config/configForm";
 
 ChartJS.register(
   RadialLinearScale,
@@ -40,9 +41,13 @@ export default function DashBoardPage() {
   const [top, setTop] = React.useState<any>();
   const emote = ["🥇", "🥈", "🥉", "🏅", "🏅"];
   const [total,setTotal] = React.useState<Number>(0);
-  const fetchData = async () => {
+  const [filterSize,setSize] = React.useState<string>("ทุกขนาด");
+  const [filterBusinessType,setBusinessType] = React.useState<string>("ทั้งหมด");
+  const size = ["ทุกขนาด","น้อยกว่า 10 คน","10-19 คน","20-49 คน","50-99 คน","100-199 คน","200 คนขึ้นไป"]
+  const [isLoading,setLoading] = React.useState<boolean>(false)
+  const fetchData = async (filterBusinessType:string,filterSize:string) => {
     try {
-      const response = await fetch("/api/data");
+      const response = await fetch(`/api/data?business=${filterBusinessType}&size=${filterSize}`);
       const getTotalUser = await fetch("/api/countUser");
       if (!response.ok || !getTotalUser.ok) {
         throw new Error("Network response was not ok");
@@ -55,22 +60,27 @@ export default function DashBoardPage() {
       console.error("Error fetching data:", error);
     }
   };
-
+  
   useEffect(() => {
+    setLoading(true)
     const fetchAndSetData = async () => {
-      const getData = await fetchData();
+     
+      const getData = await fetchData(filterBusinessType!,filterSize!);
 
       
       setResult(getData?.result || []);
       setTotal(getData?.total.values || 0);
        const sort = topLearn(getData?.result);
 
-    
+      
        setTop(sort);
+       if(getData)
+        setLoading(false)
     };
 
     fetchAndSetData();
-  }, []);
+    // setLoading(false)
+  }, [filterBusinessType,filterSize]);
 
   const options = {
     indexAxis: "x"  as const,
@@ -104,26 +114,96 @@ export default function DashBoardPage() {
 
   return (
     <div className="w-full">
-      <div className="justify-end flex w-full">
-      <Autocomplete
-  className="max-w-xs"
-  label="เลือกประเภทกิจการ"
-  placeholder="เลือกประเภทกิจการ"
+
+{isLoading ? (
+  <div className="fixed inset-0 z-50 bg-white/60 flex items-center justify-center">
+    <Spinner
+      classNames={{ label: "text-foreground mt-4" }}
+      label="กำลังโหลดข้อมูล"
+      variant="simple"
+    />
+  </div>
+) : null} 
+     
+    
+      <div className="justify-end flex w-full gap-3">
+        <Card className=" ">
+          {/* <CardHeader>
+          <h3 className="text-lg font-semibold">การตั้งค่าตัวกรองข้อมูลกิจการ</h3>
+          </CardHeader> */}
+          <CardBody className="">
+          <div className="flex gap-3 justify-end">
+          <Autocomplete
+  className="w-[250px]"
+
+ defaultSelectedKey={1}
+  label="เลือกขนาดกิจการ"
+  placeholder="เลือกขนาดกิจการ"
+  onInputChange={setSize}
+  defaultInputValue={"ทุกขนาด"}
 >
   
   {
    
-    result && result.length > 0 ? (
-      result.map((element:any, index:number) => (
-        element.data.map((item:any, itemIndex:number) => (
-          <AutocompleteItem key={`${index}-${itemIndex}`}>{item.label}</AutocompleteItem>
-        ))
+   size && size.length > 0 ? (
+    size.map((element:any, index:number) => (
+       
+        
+          (
+            <AutocompleteItem key={`${index}`}>{element}</AutocompleteItem>
+          )
+          )
       ))
-    ) : (
+    : (
       <AutocompleteItem>ไม่มีข้อมูล</AutocompleteItem> // fallback value when no data is available
     )
   }
 </Autocomplete>
+      <Autocomplete
+  className="w-[500px]"
+  label="เลือกประเภทกิจการ"
+  placeholder="เลือกประเภทกิจการ"
+  onInputChange={setBusinessType}
+  defaultInputValue={"ทั้งหมด"}
+>
+  
+{
+  typeOfBusiness && typeOfBusiness.length > 0 ? (
+    <>
+      <AutocompleteItem key="default">ทั้งหมด</AutocompleteItem> {/* ค่า default */}
+      {
+        typeOfBusiness.map((element: any, index: number) => (
+          <AutocompleteItem key={`${index}`}>{element.label}</AutocompleteItem>
+        ))
+      }
+    </>
+  ) : (
+    <AutocompleteItem>ไม่มีข้อมูล</AutocompleteItem> // fallback value when no data is available
+  )
+}
+
+</Autocomplete>
+<Autocomplete
+  className="w-[250px]"
+
+  defaultInputValue={"ข้อมูล บริษัท ไอ วายด์ จำกัด"}
+  label="เลือกบริษัท"
+  placeholder="เลือกบริษัท"
+>
+  
+  
+  
+          
+            <AutocompleteItem key={1}>{"ข้อมูล บริษัท ไอ วายด์ จำกัด"}</AutocompleteItem>
+          
+      
+ 
+</Autocomplete>
+</div>
+
+          </CardBody>
+        </Card>
+      
 
       </div>
       
@@ -155,7 +235,7 @@ export default function DashBoardPage() {
   </Card>
 </div>
 
-<div className="grid grid-cols-5 grid-rows-6 gap-4 ">
+<div className="grid grid-cols-5 grid-rows-3 gap-4 ">
   {/* Radar Chart */}
   <div className="col-span-3 row-span-1 flex items-center justify-center">
     <Card className="py-4 w-full h-full">
