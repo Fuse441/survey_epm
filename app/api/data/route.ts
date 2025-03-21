@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   const collection = await ConnectMongo("departmentSkills")
   try {
      await collection.insertOne({
-      buisness : body.buisness,size:body.size ,data : body.data})
+      business : body.business,size:body.size ,data : body.data})
       return NextResponse.json({
         message : "บันทึกข้อมูลสำเร็จ"
       })

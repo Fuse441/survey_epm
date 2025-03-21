@@ -1016,7 +1016,7 @@ export default function Home() {
 
 {item.recommandList && item.recommandList.length > 0 && (
   <div className="mt-5">
-    <h2 className="text-xl font-bold mb-2">หลักสูตรแนะนำเพิ่มเติม</h2>
+    <h2 className="text-xl font-bold mb-2">หลักสูตรเสริมทักษะ</h2>
     {item.recommandList.map((course: any, idx: number) => (
       <Card key={idx} className="py-4 my-4">
         <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
@@ -1029,10 +1029,10 @@ export default function Home() {
             ))}
           </ul>
           <p className="text-sm font-light my-2">
-            <strong>หลักสูตรที่แนะนำ:</strong> {course.courseList}
+            <strong>หลักสูตรเสริมทักษะ:</strong> {course.courseList}
           </p>
           <div className="w-full flex justify-end">
-            <Chip color="success" className="text-sky-50">หลักสูตรแนะนำ</Chip>
+            <Chip color="success" className="text-sky-50">หลักสูตรเสริมทักษะ</Chip>
           </div>
         </CardBody>
       </Card>
