@@ -15,14 +15,14 @@ import {
   LinearScale,
   BarElement,
 } from "chart.js";
-import { Radar, Doughnut, Bar } from "react-chartjs-2";
+import { Radar, Doughnut, Bar, Line } from "react-chartjs-2";
 
-import { bar, doughnut, radar, topLearn } from "@/config/dashboard";
+import { bar, doughnut, line, radar, topLearn } from "@/config/dashboard";
 import { DepartmentIcon, UsersIcon } from "@/components/icons";
 import { Chip } from "@heroui/chip";
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { typeOfBusiness } from "@/config/configForm";
-
+import {Tabs, Tab} from "@heroui/tabs";
 ChartJS.register(
   RadialLinearScale,
   PointElement,
@@ -44,6 +44,7 @@ export default function DashBoardPage() {
   const [filterSize, setSize] = React.useState<any>("all");
   const [filterBusinessType, setBusinessType] =
     React.useState<string>("ทั้งหมด");
+    const [selected, setSelected] = React.useState<any>("bar");
   const size = [
     "ทุกขนาด",
     "น้อยกว่า 10 คน",
@@ -91,19 +92,16 @@ export default function DashBoardPage() {
 
   const options = {
     indexAxis: "x" as const,
-    // indexAxis: "y", // ถ้าอยากให้เปลี่ยนเป็นแนวนอนแทน
-
     scales: {
       x: {
         ticks: {
-          display: true, // ซ่อนหรือแสดง label
-          // เพิ่มการหมุน label ถ้าอยากให้ไม่ชนกัน
+          display: true,
           maxRotation: 45,
           minRotation: 0,
         },
         title: {
           display: true,
-          text: "ชื่อแผนก", // ชื่อแกน X
+          text: selected == "bar" ? "ชื่อแผนก" : "ชื่อหลักสูตร", 
         },
       },
       y: {
@@ -113,7 +111,7 @@ export default function DashBoardPage() {
         },
         title: {
           display: true,
-          text: "จำนวนหลักสูตร", // ชื่อแกน Y
+          text: "จำนวนหลักสูตร", 
         },
       },
     },
@@ -193,7 +191,7 @@ export default function DashBoardPage() {
                     ))}
                   </>
                 ) : (
-                  <AutocompleteItem>ไม่มีข้อมูล</AutocompleteItem> // fallback value when no data is available
+                  <AutocompleteItem>ไม่มีข้อมูล</AutocompleteItem>
                 )}
               </Autocomplete>
               <Autocomplete
@@ -324,6 +322,7 @@ export default function DashBoardPage() {
 
         {/* Top Courses to Learn */}
         <div className="">
+          
           <Card className="py-4 w-full ">
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
               <p className="text-xl uppercase font-bold">
@@ -365,7 +364,10 @@ export default function DashBoardPage() {
 
         {/* Bar Chart */}
         <div className="col-span-2 row-start-3">
+      
           <Card className="py-4 w-full ">
+          <Tabs aria-label="Options" className="mx-4" selectedKey={selected} onSelectionChange={setSelected}>
+          <Tab key="bar" title="ภาพรวม" >
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
               <p className="text-tiny uppercase font-bold">Skill Overview</p>
               <small className="text-default-500" />
@@ -393,8 +395,41 @@ export default function DashBoardPage() {
                 ช่วยให้สามารถมองเห็นแนวโน้มและความสำคัญของการพัฒนาทักษะในแต่ละสายงานได้อย่างชัดเจน
               </p>
             </CardFooter>
+            </Tab>
+            <Tab key="line" title="หลักสูตร">
+            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+              <p className="text-tiny uppercase font-bold">Skill Overview</p>
+              <small className="text-default-500" />
+              <h4 className="font-bold text-large">Department Skill</h4>
+            </CardHeader>
+            <CardBody className="overflow-visible py-2">
+              <div className="flex justify-start">
+                {!result ? (
+                  <div className="flex items-center justify-center">
+                    <Spinner
+                      classNames={{ label: "text-foreground mt-4" }}
+                      label="กำลังโหลดข้อมูล"
+                      variant="simple"
+                    />
+                  </div>
+                ) : (
+                  <Line options={options} data={line(result)}/>
+                )}
+              </div>
+            </CardBody>
+            <CardFooter>
+              <p className="text-start text-sm text-default-600 leading-relaxed">
+                แสดงการกระจายของหลักสูตรที่ได้รับความนิยมในแต่ละแผนก
+                โดยใช้กราฟแท่งเพื่อเปรียบเทียบจำนวนหลักสูตรที่แต่ละแผนกต้องเรียนรู้
+                ช่วยให้สามารถมองเห็นแนวโน้มและความสำคัญของการพัฒนาทักษะในแต่ละสายงานได้อย่างชัดเจน
+              </p>
+            </CardFooter>
+            </Tab>
+            </Tabs>
           </Card>
+        
         </div>
+      
       </div>
 
  

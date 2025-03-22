@@ -161,6 +161,56 @@ export const doughnut = (response: any) => {
   };
 };
 
+export const line = (response: any[]) => {
+  console.log("response ==> ", response);
+
+  const departmentLabelMap: Record<string, string[]> = {};
+
+  // 1. รวม label ทั้งหมดของแต่ละแผนก
+  response.forEach((item) => {
+    item.data.forEach((d: any) => {
+      const dept = d.department;
+      if (!departmentLabelMap[dept]) {
+        departmentLabelMap[dept] = [];
+      }
+      departmentLabelMap[dept].push(...(d.label || []));
+    });
+  });
+
+  // 2. หา label ที่เจอบ่อยที่สุดในแต่ละแผนก
+  const labels: string[] = [];
+  const data: number[] = [];
+
+  Object.entries(departmentLabelMap).forEach(([dept, labelList]) => {
+    const countMap: Record<string, number> = {};
+
+    labelList.forEach((label) => {
+      countMap[label] = (countMap[label] || 0) + 1;
+    });
+
+    // หา label ที่มี count สูงสุด
+    const topLabel = Object.entries(countMap).sort((a, b) => b[1] - a[1])[0];
+    if (topLabel) {
+      labels.push(topLabel[0]); // ชื่อหลักสูตร
+      data.push(topLabel[1]);   // จำนวนที่เจอ
+    }
+  });
+
+  return {
+    labels,
+    datasets: [
+      {
+        fill: true,
+        label: "หลักสูตรยอดนิยมตามแผนก",
+        data,
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
+    ],
+  };
+};
+
+
 export const bar = (response: any) => {
   const departments = [
     "IT Infrastructure Services",
