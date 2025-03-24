@@ -13,11 +13,26 @@ type QuestionsProps = {
     React.SetStateAction<{ [key: string]: string | string[] }>
   >;
 };
+
+const handleAccordionChange = (index: number) => {
+  // console.log("index ==> ", index);
+  
+  const targetSection = document.getElementById(`session-${index}`);
+  
+  if (targetSection) {
+  // console.log("targetSection ==> ", targetSection);
+    targetSection.scrollIntoView({ behavior: "smooth", block: "end" });
+  }
+};
+
+
 export default function Questions({ selected, setSelected }: QuestionsProps) {
   return (
-    <Accordion isCompact>
+    <Accordion  isCompact id="main-questions">
       {questions.map((item, index) => (
         <AccordionItem
+         id={`session-${index}`}
+          onClick={() => handleAccordionChange(index)}
           key={index}
           aria-label={item.question}
           subtitle={
