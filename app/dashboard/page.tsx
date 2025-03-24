@@ -15,14 +15,22 @@ import {
   LinearScale,
   BarElement,
 } from "chart.js";
-import { Radar, Doughnut, Bar, Line } from "react-chartjs-2";
+import { Radar, Doughnut, Bar, Line, PolarArea } from "react-chartjs-2";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableColumn,
+  TableRow,
+  TableCell,
+} from "@heroui/table";
 
-import { bar, doughnut, line, radar, topLearn } from "@/config/dashboard";
+import { bar, doughnut, radar, tables, topLearn } from "@/config/dashboard";
 import { DepartmentIcon, UsersIcon } from "@/components/icons";
 import { Chip } from "@heroui/chip";
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { typeOfBusiness } from "@/config/configForm";
-import {Tabs, Tab} from "@heroui/tabs";
+import { Tabs, Tab } from "@heroui/tabs";
 ChartJS.register(
   RadialLinearScale,
   PointElement,
@@ -44,7 +52,7 @@ export default function DashBoardPage() {
   const [filterSize, setSize] = React.useState<any>("all");
   const [filterBusinessType, setBusinessType] =
     React.useState<string>("ทั้งหมด");
-    const [selected, setSelected] = React.useState<any>("bar");
+  const [selected, setSelected] = React.useState<any>("bar");
   const size = [
     "ทุกขนาด",
     "น้อยกว่า 10 คน",
@@ -101,7 +109,7 @@ export default function DashBoardPage() {
         },
         title: {
           display: true,
-          text: selected == "bar" ? "ชื่อแผนก" : "ชื่อหลักสูตร", 
+          text: selected == "bar" ? "ชื่อแผนก" : "ชื่อหลักสูตร",
         },
       },
       y: {
@@ -111,7 +119,7 @@ export default function DashBoardPage() {
         },
         title: {
           display: true,
-          text: "จำนวนหลักสูตร", 
+          text: "จำนวนหลักสูตร",
         },
       },
     },
@@ -128,14 +136,14 @@ export default function DashBoardPage() {
           />
         </div>
       ) : null}
-      
+
       <div className="text-start my-5">
         <h1 className="font-bold text-4xl">
           Dashboard Workforce Skill Development Platform
         </h1>
       </div>
-   
-        <div className="headers flex gap-4 mb-5">
+
+      <div className="headers flex gap-4 mb-5">
         <Card className="pl-3 w-[250px] text-center">
           <CardHeader className="flex justify-center items-center gap-2">
             <UsersIcon size={24} className="text-blue-500" />
@@ -305,7 +313,7 @@ export default function DashBoardPage() {
                     />
                   </div>
                 ) : (
-                  <Doughnut data={doughnut(result)} />
+                  <PolarArea data={doughnut(result)} />
                 )}
               </div>
             </CardBody>
@@ -322,7 +330,6 @@ export default function DashBoardPage() {
 
         {/* Top Courses to Learn */}
         <div className="">
-          
           <Card className="py-4 w-full ">
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
               <p className="text-xl uppercase font-bold">
@@ -359,81 +366,115 @@ export default function DashBoardPage() {
             </CardFooter>
           </Card>
         </div>
-       
-       
 
         {/* Bar Chart */}
         <div className="col-span-2 row-start-3">
-      
           <Card className="py-4 w-full ">
-          <Tabs aria-label="Options" className="mx-4" selectedKey={selected} onSelectionChange={setSelected}>
-          <Tab key="bar" title="ภาพรวม" >
-            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-              <p className="text-tiny uppercase font-bold">Skill Overview</p>
-              <small className="text-default-500" />
-              <h4 className="font-bold text-large">Department Skill</h4>
-            </CardHeader>
-            <CardBody className="overflow-visible py-2">
-              <div className="flex justify-start">
-                {!result ? (
-                  <div className="flex items-center justify-center">
-                    <Spinner
-                      classNames={{ label: "text-foreground mt-4" }}
-                      label="กำลังโหลดข้อมูล"
-                      variant="simple"
-                    />
+            <Tabs
+              aria-label="Options"
+              className="mx-4"
+              selectedKey={selected}
+              onSelectionChange={setSelected}
+            >
+              <Tab key="bar" title="ภาพรวม">
+                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                  <p className="text-tiny uppercase font-bold">
+                    Skill Overview
+                  </p>
+                  <small className="text-default-500" />
+                  <h4 className="font-bold text-large">Department Skill</h4>
+                </CardHeader>
+                <CardBody className="overflow-visible py-2">
+                  <div className="flex justify-start">
+                    {!result ? (
+                      <div className="flex items-center justify-center">
+                        <Spinner
+                          classNames={{ label: "text-foreground mt-4" }}
+                          label="กำลังโหลดข้อมูล"
+                          variant="simple"
+                        />
+                      </div>
+                    ) : (
+                     
+                        <Bar data={bar(result)} options={options} />
+                       
+                  
+                      
+                    )}
                   </div>
-                ) : (
-                  <Bar data={bar(result)} options={options} />
-                )}
-              </div>
-            </CardBody>
-            <CardFooter>
-              <p className="text-start text-sm text-default-600 leading-relaxed">
-                แสดงการกระจายของหลักสูตรที่ได้รับความนิยมในแต่ละแผนก
-                โดยใช้กราฟแท่งเพื่อเปรียบเทียบจำนวนหลักสูตรที่แต่ละแผนกต้องเรียนรู้
-                ช่วยให้สามารถมองเห็นแนวโน้มและความสำคัญของการพัฒนาทักษะในแต่ละสายงานได้อย่างชัดเจน
-              </p>
-            </CardFooter>
-            </Tab>
-            <Tab key="line" title="หลักสูตร">
-            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-              <p className="text-tiny uppercase font-bold">Skill Overview</p>
-              <small className="text-default-500" />
-              <h4 className="font-bold text-large">Department Skill</h4>
-            </CardHeader>
-            <CardBody className="overflow-visible py-2">
-              <div className="flex justify-start">
-                {!result ? (
-                  <div className="flex items-center justify-center">
-                    <Spinner
-                      classNames={{ label: "text-foreground mt-4" }}
-                      label="กำลังโหลดข้อมูล"
-                      variant="simple"
-                    />
+                </CardBody>
+                <CardFooter>
+                  <p className="text-start text-sm text-default-600 leading-relaxed">
+                    แสดงการกระจายของหลักสูตรที่ได้รับความนิยมในแต่ละแผนก
+                    โดยใช้กราฟแท่งเพื่อเปรียบเทียบจำนวนหลักสูตรที่แต่ละแผนกต้องเรียนรู้
+                    ช่วยให้สามารถมองเห็นแนวโน้มและความสำคัญของการพัฒนาทักษะในแต่ละสายงานได้อย่างชัดเจน
+                  </p>
+                </CardFooter>
+              </Tab>
+              <Tab key="line" title="หลักสูตร">
+                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                  <p className="text-tiny uppercase font-bold">
+                    Skill Overview
+                  </p>
+                  <small className="text-default-500" />
+                  <h4 className="font-bold text-large">Department Skill</h4>
+                </CardHeader>
+                <CardBody className="overflow-visible py-2">
+                  <div className="flex justify-start">
+                    {!result ? (
+                      <div className="flex items-center justify-center">
+                        <Spinner
+                          classNames={{ label: "text-foreground mt-4" }}
+                          label="กำลังโหลดข้อมูล"
+                          variant="simple"
+                        />
+                      </div>
+                    ) : (
+                      <Table aria-label="">
+                        <TableHeader >
+                          <TableColumn className="text-base">ชื่อหลักแผนก</TableColumn>
+                          <TableColumn className="text-base">ชื่อหลักสูตร</TableColumn>
+                          <TableColumn className="text-base">จำนวน</TableColumn>
+                        </TableHeader>
+                        <TableBody>
+
+                        {result && tables(result).length > 0 ? (
+  tables(result).map((item: any, index: number) => (
+    <TableRow key={index}>
+      <TableCell>{item.department}</TableCell>
+      <TableCell>{item.course}</TableCell>
+      <TableCell>
+        <Chip color="secondary" className="px-3">{item.score}</Chip>
+      </TableCell>
+    </TableRow>
+  ))
+) : (
+  <TableRow>
+    <TableCell colSpan={3} className="text-center text-gray-500">
+      ไม่พบข้อมูล
+    </TableCell>
+  </TableRow>
+)}
+
+</TableBody>
+
+                      </Table>
+                      // <Line options={options} data={line(result)}/>
+                    )}
                   </div>
-                ) : (
-                  <Line options={options} data={line(result)}/>
-                )}
-              </div>
-            </CardBody>
-            <CardFooter>
-              <p className="text-start text-sm text-default-600 leading-relaxed">
-                แสดงการกระจายของหลักสูตรที่ได้รับความนิยมในแต่ละแผนก
-                โดยใช้กราฟแท่งเพื่อเปรียบเทียบจำนวนหลักสูตรที่แต่ละแผนกต้องเรียนรู้
-                ช่วยให้สามารถมองเห็นแนวโน้มและความสำคัญของการพัฒนาทักษะในแต่ละสายงานได้อย่างชัดเจน
-              </p>
-            </CardFooter>
-            </Tab>
+                </CardBody>
+                <CardFooter>
+                  <p className="text-start text-sm text-default-600 leading-relaxed">
+                    แสดงการกระจายของหลักสูตรที่ได้รับความนิยมในแต่ละแผนก
+                    โดยใช้กราฟแท่งเพื่อเปรียบเทียบจำนวนหลักสูตรที่แต่ละแผนกต้องเรียนรู้
+                    ช่วยให้สามารถมองเห็นแนวโน้มและความสำคัญของการพัฒนาทักษะในแต่ละสายงานได้อย่างชัดเจน
+                  </p>
+                </CardFooter>
+              </Tab>
             </Tabs>
           </Card>
-        
         </div>
-      
       </div>
-
- 
-   
     </div>
   );
 }

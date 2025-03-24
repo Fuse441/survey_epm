@@ -182,7 +182,7 @@ export const selectCourse: any = {
   "Accounting & Finance (งานบัญชีและการเงิน)": [
     {
       label:
-        "หลักสูตรพื้นฐาน Digital Accounting & Excel for Financial Analysis",
+        "หลักสูตร Digital Accounting & Excel for Financial Analysis",
       match: "Data Analytics for Finance",
       detail: [
         "การใช้ Microsoft Excel วิเคราะห์ข้อมูลทางการเงิน",

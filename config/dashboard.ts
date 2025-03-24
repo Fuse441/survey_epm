@@ -161,7 +161,7 @@ export const doughnut = (response: any) => {
   };
 };
 
-export const line = (response: any[]) => {
+export const tables = (response: any[]) => {
   console.log("response ==> ", response);
 
   const departmentLabelMap: Record<string, string[]> = {};
@@ -180,8 +180,9 @@ export const line = (response: any[]) => {
   // 2. หา label ที่เจอบ่อยที่สุดในแต่ละแผนก
   const labels: string[] = [];
   const data: number[] = [];
-
+  let result: Record<string, any>[] = [];
   Object.entries(departmentLabelMap).forEach(([dept, labelList]) => {
+  // console.log("dept ==> ", dept);
     const countMap: Record<string, number> = {};
 
     labelList.forEach((label) => {
@@ -190,24 +191,15 @@ export const line = (response: any[]) => {
 
     // หา label ที่มี count สูงสุด
     const topLabel = Object.entries(countMap).sort((a, b) => b[1] - a[1])[0];
+    // console.log("topLabel ==> ", topLabel);
     if (topLabel) {
-      labels.push(topLabel[0]); // ชื่อหลักสูตร
-      data.push(topLabel[1]);   // จำนวนที่เจอ
+      result.push({department : dept,course : topLabel[0],score : topLabel[1]})
+      // labels.push(topLabel[0]); // ชื่อหลักสูตร
+      // data.push(topLabel[1]);   // จำนวนที่เจอ
     }
   });
-
-  return {
-    labels,
-    datasets: [
-      {
-        fill: true,
-        label: "หลักสูตรยอดนิยมตามแผนก",
-        data,
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-    ],
-  };
+  console.log(result)
+  return result
 };
 
 
