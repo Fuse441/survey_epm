@@ -259,15 +259,7 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
     e.preventDefault();
     setLoading(true);
 
-    //   const hasRegisNumber = !!form.regisNumber;
-    //   console.log("hasRegisNumber ==> ", hasRegisNumber);
-    // const hasInsuranceCode = !!form.insuranceCode;
-    // console.log("hasInsuranceCode ==> ", hasInsuranceCode);
-
-    // const vaildate_RegisNumber = !hasRegisNumber || !hasInsuranceCode;
-    // console.log("vaildate_RegisNumber ==> ", vaildate_RegisNumber);
-    // const vaildatedate_InsuranceCode = !hasRegisNumber || !hasInsuranceCode;
-    // console.log("vaildatedate_InsuranceCode ==> ", vaildatedate_InsuranceCode);
+   
     const validationErrors = {
       // vaildate_RegisNumber,
       // vaildatedate_InsuranceCode,
@@ -293,27 +285,32 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
       })
     );
 
-    await Promise.all(
-      questions.map(async (question, index) => {
-        const current = index + 1;
-        let foundDefined = false;
+    const updatedStateQuestions: boolean[] = [];
+  await Promise.all(
+    questions.map(async (question, index) => {
+      const current = index + 1;
+      let foundDefined = false;
 
-        // ลูปผ่าน sub_questions
-        for (let jndex = 0; jndex < question.sub_question.length; jndex++) {
-          const currentJ = jndex + 1;
+      // Loop through sub_questions
+      for (let jndex = 0; jndex < question.sub_question.length; jndex++) {
+        const currentJ = jndex + 1;
 
-          // เช็คว่า selected[`${current}.${currentJ}`] เป็น undefined หรือไม่
-          if (selected[`${current}.${currentJ}`] === undefined) {
-            foundDefined = true;
-            break;
-          } else {
-            foundDefined = false;
-          }
+        // Check if the value is undefined
+        if (selected[`${current}.${currentJ}`] === undefined) {
+          foundDefined = true;
+          break;
+        } else {
+          foundDefined = false;
         }
+      }
 
-        stateQuestions[index] = foundDefined;
-      })
-    );
+      // Add result to the state array
+      updatedStateQuestions.push(foundDefined);
+    })
+  );
+
+  // Update stateQuestions with the accumulated result
+  setStateQuestions(updatedStateQuestions);
 
     let scheme: any[] = [];
 
