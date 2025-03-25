@@ -33,7 +33,7 @@ import { IForm } from "@/interfaces/form";
 import { Spinner } from "@heroui/spinner";
 import { registrationNumber } from "./../config/configForm";
 import { messageAuthen } from "@/config/message";
-import { stateQuestions } from './../config/stateQuestions';
+import { stateQuestionsError } from "@/config/stateQuestions";
 
 export default function Home() {
   const [provideSkills, setProvideskills] = useState("");
@@ -305,13 +305,15 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
       }
 
       // Add result to the state array
+      stateQuestionsError[index] = foundDefined
       updatedStateQuestions.push(foundDefined);
     })
   );
 
   // Update stateQuestions with the accumulated result
+  
   setStateQuestions(updatedStateQuestions);
-
+  
     let scheme: any[] = [];
 
     function getSortedCourses(

@@ -5,7 +5,7 @@ import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 import { Accordion, AccordionItem } from "@heroui/accordion";
 
 import { questions } from "@/config/questions";
-import { stateQuestions } from "@/config/stateQuestions";
+import { stateQuestionsError } from "@/config/stateQuestions"
 import { exclusiveOptions } from "@/config/exclusiveOptions";
 type QuestionsProps = {
   selected: { [key: string]: string | string[] };
@@ -36,7 +36,7 @@ export default function Questions({ selected, setSelected }: QuestionsProps) {
           key={index}
           aria-label={item.question}
           subtitle={
-            stateQuestions[index] ? (
+            stateQuestionsError[index] ? (
               <p className="flex">
                 <span className="text-primary ml-1 text-red-600">
                   กรุณาเลือกตัวเลือกให้ครบ
@@ -46,7 +46,7 @@ export default function Questions({ selected, setSelected }: QuestionsProps) {
               ""
             )
           }
-          title={stateQuestions[index] ? `* ${item.question}` : item.question}
+          title={stateQuestionsError[index] ? `* ${item.question}` : item.question}
         >
           {item.sub_question.map((sub, id_sub) => {
             const key = `${index + 1}.${id_sub + 1}`;

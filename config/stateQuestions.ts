@@ -1,4 +1,4 @@
-export let stateQuestions = [
+export let stateQuestionsError = [
   false,
   false,
   false,
