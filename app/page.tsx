@@ -28,11 +28,12 @@ import { groupTypeBusiness, typeOfBusiness } from "@/config/configForm";
 import Questions from "@/components/question";
 import { questions } from "@/config/questions";
 import { selectCourse, selectSoftSkill } from "@/config/selectCourse";
-import { stateQuestions } from "@/config/stateQuestions";
+// import { stateQuestions } from "@/config/stateQuestions";
 import { IForm } from "@/interfaces/form";
 import { Spinner } from "@heroui/spinner";
 import { registrationNumber } from "./../config/configForm";
 import { messageAuthen } from "@/config/message";
+import { stateQuestions } from './../config/stateQuestions';
 
 export default function Home() {
   const [provideSkills, setProvideskills] = useState("");
@@ -252,7 +253,8 @@ export default function Home() {
   const endIndex = startIndex + itemsPerPage;
   const paginatedCourses = courses?.slice(startIndex, endIndex) ?? [];
   const isFirstRender = useRef(true);
-
+const [stateQuestions,setStateQuestions] = React.useState<boolean[]>([])
+const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -420,6 +422,7 @@ export default function Home() {
     // console.log("isSubmit && isQuestion ==> ", isSubmit, isQuestion);
 
     setLoading(false);
+    setStatusSubmit(true)
   };
 
   useEffect(() => {
@@ -428,27 +431,29 @@ export default function Home() {
       isFirstRender.current = false;
       return;
     }
-
-    const checkForm = Object.values(stateError).filter(
-      (item) => item.status === true
-    );
-    const _isSubmit = checkForm.length === 0;
-
-    const filter = stateQuestions.filter((item) => item === true);
-    const _isQuestion = filter.length === 0;
-
-    setSubmit(_isSubmit);
-    setQuestion(_isQuestion);
-
-    console.log("isSubmit (จาก stateError) ==> ", _isSubmit);
-    console.log("isQuestion (จาก stateQuestions) ==> ", _isQuestion);
-
-    // ✅ ใช้ค่าที่คำนวณมาแล้วแทน state
-    if (_isSubmit && _isQuestion) {
-      console.log("_isSubmit && _isQuestion ==> ", _isSubmit && _isQuestion);
-
-      onOpen();
+    if(statusSubmit) {
+      const checkForm = Object.values(stateError).filter(
+        (item) => item.status === true
+      );
+      const _isSubmit = checkForm.length === 0;
+  
+      const filter = stateQuestions.filter((item) => item === true);
+      const _isQuestion = filter.length === 0;
+  
+      setSubmit(_isSubmit);
+      setQuestion(_isQuestion);
+  
+      console.log("isSubmit (จาก stateError) ==> ", _isSubmit);
+      console.log("isQuestion (จาก stateQuestions) ==> ", _isQuestion);
+  
+      // ✅ ใช้ค่าที่คำนวณมาแล้วแทน state
+      if (_isSubmit && _isQuestion) {
+        console.log("_isSubmit && _isQuestion ==> ", _isSubmit && _isQuestion);
+  
+        onOpen();
+      }
     }
+    
   }, [stateError, stateQuestions]);
 
   // useEffect(() => {
