@@ -35,8 +35,10 @@ import { registrationNumber } from "./../config/configForm";
 import { messageAuthen } from "@/config/message";
 import { stateQuestionsError } from "@/config/stateQuestions";
 import { useQuestion } from "@/hooks/useQuestion";
+import Confirm from "@/components/Confirm";
 
 export default function Home() {
+  const confirmDisclosure = useDisclosure();
   const [provideSkills, setProvideskills] = useState("");
   const province = GetProvince();
   const [errors, setErrors] = React.useState({});
@@ -1203,7 +1205,7 @@ export default function Home() {
                       color="primary"
                       onPress={() => {
                         onClose();
-                        saveData();
+                        confirmDisclosure.onOpen(); // เปิด Confirm Modal
                       }}
                     >
                       บันทึกข้อมูล
@@ -1215,6 +1217,25 @@ export default function Home() {
           </Modal>
         </section>
       </Form>
+      <Confirm
+  stateOpen={{
+    isOpen: confirmDisclosure.isOpen,
+    onOpen: confirmDisclosure.onOpen,
+    onOpenChange: confirmDisclosure.onOpenChange,
+  }}
+  modal={{
+    title: "ยืนยันการบันทึก",
+    description: "คุณต้องการบันทึกข้อมูลนี้หรือไม่?",
+    confirmText: "ยืนยัน",
+    cancelText: "ยกเลิก",
+    onConfirm: () => {
+      saveData();   // ปิด modal หลัก
+    },
+  }}
+/>
+   
     </>
+
+    
   );
 }
