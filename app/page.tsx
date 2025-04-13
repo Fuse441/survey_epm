@@ -21,7 +21,7 @@ import {
 } from "@heroui/modal";
 import { Chip } from "@heroui/chip";
 import { Form } from "@heroui/form";
-
+import { Select, SelectedItems, SelectItem } from "@heroui/select";
 import GetProvince from "./../service/province";
 
 import { groupTypeBusiness, typeOfBusiness } from "@/config/configForm";
@@ -34,6 +34,7 @@ import { Spinner } from "@heroui/spinner";
 import { registrationNumber } from "./../config/configForm";
 import { messageAuthen } from "@/config/message";
 import { stateQuestionsError } from "@/config/stateQuestions";
+import { useQuestion } from "@/hooks/useQuestion";
 
 export default function Home() {
   const [provideSkills, setProvideskills] = useState("");
@@ -42,6 +43,19 @@ export default function Home() {
   const [selected, setSelected] = useState<{
     [key: string]: string | string[];
   }>({});
+  const { selectQuestions, setQuestions } = useQuestion(); 
+  const precisBranch:Record<string,string> = {
+      "IT Infrastructure Services (ฝ่ายบริหารโครงสร้างด้านเทคโนโลยีสารสนเทศ)" : "IIS",
+      "Software Enterprise Services (ฝ่ายบริการซอฟต์แวร์ธุรกิจองค์กร)" : "SES",
+      "IT Services (ฝ่ายบริการเทคโนโลยีสารสนเทศ)" : "ITS",
+      "Solutions Development (ฝ่ายพัฒนาดิจิทัลโซลูชั่นส์)" : "SD",
+      "Accounting & Finance (งานบัญชีและการเงิน)" : "AF",
+      "Human Resource (ฝ่ายทรัพยากรบุคคล)" : "HR",
+      "Administration (ฝ่ายธุรการ)" : "ADMIN",
+      "Procurement (ฝ่ายจัดซื้อ)" : "PROC",
+      "Project Management (ฝ่ายบริหารงานโครงการ)" : "PM",
+      "Sales (ฝ่ายขาย)" : "SALES"
+  } 
   const [isLoading, setLoading] = React.useState<boolean>(false);
   const [form, setForm] = useState<IForm>({
     regisNumber: "",
@@ -71,29 +85,25 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     const data = localStorage.getItem("token");
     const decrypt_token = CryptoJS.AES.decrypt(
       JSON.parse(data!),
       "emp"
     ).toString(CryptoJS.enc.Utf8);
     if (!localStorage.getItem("token")) {
-     
       return router.push("/login");
-
     }
 
-    if(JSON.parse(decrypt_token).role == "admin"){
-    
+    if (JSON.parse(decrypt_token).role == "admin") {
       return router.push("/dashboard");
     }
- 
+
     if (JSON.parse(decrypt_token).status) {
       setIsAuthen(true);
       setShowSuccess(true);
-  
     }
-    setLoading(false)
+    setLoading(false);
   }, []);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -174,9 +184,9 @@ export default function Home() {
   const saveData = async () => {
     setLoading(true);
     const selectObject: any = courses;
-   
+
     const resultArray = selectObject.map((dataGroup: any) => {
-    // console.log("dataGroup ==> ", dataGroup);
+      // //console.log("dataGroup ==> ", dataGroup);
       let departmentName = "";
       const labelList: string[] = [];
       const softSkillList: string[] = [];
@@ -200,25 +210,24 @@ export default function Home() {
           });
         }
       });
-  
 
       return {
         department: departmentName,
         label: labelList,
         softskill: softSkillList,
-        recommandList : recommandList
+        recommandList: recommandList,
       };
     });
 
-    console.log("resultArray ==> ", resultArray);
+    //console.log("resultArray ==> ", resultArray);
 
     const res = await fetch("/api/data", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         business: form.typeBusiness,
-        size : form.size,
-        data: resultArray, 
+        size: form.size,
+        data: resultArray,
       }),
     });
 
@@ -240,7 +249,16 @@ export default function Home() {
     }
     //
   };
+  const [openQuestion, setOpenQuestion] = useState(false);
 
+  useEffect(() => {
+    console.log("output ==> " + Array.from(selectQuestions))
+    if(Array.from(selectQuestions).includes("none")){
+      return setOpenQuestion(false);
+    }
+  
+  }, [selectQuestions])
+  
   const updateStatus = (key: string | number, value: any) => {
     setStateError((prevState: any) => ({
       ...prevState,
@@ -253,13 +271,12 @@ export default function Home() {
   const endIndex = startIndex + itemsPerPage;
   const paginatedCourses = courses?.slice(startIndex, endIndex) ?? [];
   const isFirstRender = useRef(true);
-const [stateQuestions,setStateQuestions] = React.useState<boolean[]>([])
-const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
+  const [stateQuestions, setStateQuestions] = React.useState<boolean[]>([]);
+  const [statusSubmit, setStatusSubmit] = React.useState<boolean>(false);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-   
     const validationErrors = {
       // vaildate_RegisNumber,
       // vaildatedate_InsuranceCode,
@@ -286,34 +303,33 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
     );
 
     const updatedStateQuestions: boolean[] = [];
-  await Promise.all(
-    questions.map(async (question, index) => {
-      const current = index + 1;
-      let foundDefined = false;
+    await Promise.all(
+      questions.filter((item) => selectQuestions.has(item.id)).map(async (question, index) => {
+        const current = index + 1;
+        let foundDefined = false;
+        console.log("question ==> ",question)
+        for (let jndex = 0; jndex < question.sub_question.length; jndex++) {
+          const currentJ = jndex + 1;
 
-      // Loop through sub_questions
-      for (let jndex = 0; jndex < question.sub_question.length; jndex++) {
-        const currentJ = jndex + 1;
-
-        // Check if the value is undefined
-        if (selected[`${current}.${currentJ}`] === undefined) {
-          foundDefined = true;
-          break;
-        } else {
-          foundDefined = false;
+          // Check if the value is undefined
+          if (selected[`${current}.${currentJ}`] === undefined) {
+            foundDefined = true;
+            break;
+          } else {
+            foundDefined = false;
+          }
         }
-      }
 
-      // Add result to the state array
-      stateQuestionsError[index] = foundDefined
-      updatedStateQuestions.push(foundDefined);
-    })
-  );
+        // Add result to the state array
+        stateQuestionsError[index] = foundDefined;
+        updatedStateQuestions.push(foundDefined);
+      })
+    );
 
-  // Update stateQuestions with the accumulated result
-  
-  setStateQuestions(updatedStateQuestions);
-  
+    // Update stateQuestions with the accumulated result
+
+    setStateQuestions(updatedStateQuestions);
+
     let scheme: any[] = [];
 
     function getSortedCourses(
@@ -335,11 +351,12 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
       // ให้ recommend = false อยู่ข้างหน้า
       return finalItems.sort((a, b) => (a.recommend ? 1 : -1));
     }
-
-    for (let index = 0; index < questions.length; index++) {
-      const question = questions[index].question;
-      const recommand = questions[index].sub_question[1].Recommended;
-   
+    const mapQuestion = questions.filter((item) => selectQuestions.has(item.id))
+    console.log("mapQuestion ==> ", mapQuestion);
+    
+    for (let index = 0; index < mapQuestion.length; index++) {
+      const question = mapQuestion[index].question;
+      const recommand = mapQuestion[index].sub_question[1].Recommended;
 
       const current = index + 1;
 
@@ -349,7 +366,7 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
       const allCourses = selectCourse[question] || [];
       const softSkill = selectSoftSkill;
       let finalCourses: any[] = [];
-      
+
       if (level === "มาก") {
         if (selectedSkills != "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้") {
           const result = allCourses.filter((item: { match: string }) =>
@@ -360,17 +377,17 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
           );
           finalCourses = getSortedCourses(result, unselected, 3);
         } else if (selectedSkills == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้") {
-          console.log("case มาก ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้");
+          //console.log("case มาก ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้");
           finalCourses = getSortedCourses([], [], 0);
         }
       } else if (level === "ปานกลาง") {
         if (selectedSkills === "ไม่ทราบทักษะที่ควรพัฒนา") {
           finalCourses = getSortedCourses([], allCourses, 2);
         } else if (selectedSkills == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้") {
-          console.log("case ปานกลาง ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้");
+          //console.log("case ปานกลาง ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้");
           finalCourses = getSortedCourses([], [], 0);
         } else {
-          console.log("case ปานกลาง else");
+          //console.log("case ปานกลาง else");
           const result = allCourses.filter((item: { match: string }) =>
             selectedSkills.includes(item.match)
           );
@@ -380,24 +397,24 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
           finalCourses = getSortedCourses(result, unselected, 2);
         }
       } else if (level === "น้อย") {
-        // console.log("selectedSkills ==> ",((knowledge == "อื่นๆ" || knowledge == "ไม่ทราบ") && selectedSkills.includes("ไม่ทราบทักษะที่ควรพัฒนา") == true) )
+        // //console.log("selectedSkills ==> ",((knowledge == "อื่นๆ" || knowledge == "ไม่ทราบ") && selectedSkills.includes("ไม่ทราบทักษะที่ควรพัฒนา") == true) )
         if (selectedSkills == "ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้") {
-          console.log("case ปานกลาง ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้");
+          //console.log("case ปานกลาง ไม่ต้องการพัฒนาทักษะสำหรับฝ่ายนี้");
           finalCourses = getSortedCourses([], [], 0);
         } else if (
           (knowledge == "อื่นๆ" || knowledge == "ไม่ทราบ") &&
           selectedSkills.includes("ไม่ทราบทักษะที่ควรพัฒนา") == true
         ) {
-          console.log("case อื่นๆ หรือ ไม่ทราบ & ไม่ทราบทักษะที่ควรพัฒนา");
+          //console.log("case อื่นๆ หรือ ไม่ทราบ & ไม่ทราบทักษะที่ควรพัฒนา");
           finalCourses = [allCourses[0]];
         } else if (knowledge !== "อื่นๆ" && knowledge !== "ไม่ทราบ") {
-          console.log("case อื่นๆ &&  ไม่ทราบ");
+          //console.log("case อื่นๆ &&  ไม่ทราบ");
           const result = allCourses.filter((item: { match: string }) =>
             selectedSkills.includes(item.match)
           );
           finalCourses = getSortedCourses(result, [], 2);
         } else if (knowledge === "อื่นๆ") {
-          console.log("case อื่นๆ ");
+          //console.log("case อื่นๆ ");
           finalCourses = allCourses.map((item: any) => ({
             ...item,
             recommend: true,
@@ -405,54 +422,73 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
           finalCourses = finalCourses.sort((a, b) => (a.recommend ? 1 : -1));
         }
       }
-      const recommandList = knowledge && recommand?.filter(
-        (item, index) => !knowledge.includes(item.name)
-      );
-      console.log("recommandList ==> ",recommandList)
+      const recommandList =
+        knowledge &&
+        recommand?.filter((item, index) => !knowledge.includes(item.name));
+      //console.log("recommandList ==> ", recommandList);
       scheme.push({
         [question]: finalCourses,
         softSkill,
-        recommandList
+        recommandList,
       });
     }
 
     setCourse(scheme);
-    console.log("paginatedCourses ==> ",paginatedCourses)
-    // console.log("isSubmit && isQuestion ==> ", isSubmit, isQuestion);
+    //console.log("paginatedCourses ==> ", paginatedCourses);
+    // //console.log("isSubmit && isQuestion ==> ", isSubmit, isQuestion);
 
     setLoading(false);
-    setStatusSubmit(true)
+    setStatusSubmit(true);
   };
-
+  const handleSelectionQuestionChange = (keys: unknown) => {
+    
+    if (keys instanceof Set) {
+      // console.log("keys ==> ",Array.from(keys))
+      if(Array.from(keys).includes("none")){
+        return setQuestions(new Set<string>("none"));
+      }
+      setQuestions(keys as Set<string>);
+    } else if (typeof keys === 'string') {
+      setQuestions(new Set([keys]));
+    } else if (
+      typeof keys === 'object' &&
+      keys !== null &&
+      ('anchorKey' in keys || 'currentKey' in keys)
+    ) {
+      console.warn('Received range selection object:', keys);
+    } else {
+      console.warn('Unexpected keys:', keys);
+    }
+  };
+  
   useEffect(() => {
     if (isFirstRender.current) {
-      console.log("isFirstRender.current ==> ", isFirstRender.current);
+      //console.log("isFirstRender.current ==> ", isFirstRender.current);
       isFirstRender.current = false;
       return;
     }
-    if(statusSubmit) {
+    if (statusSubmit) {
       const checkForm = Object.values(stateError).filter(
         (item) => item.status === true
       );
       const _isSubmit = checkForm.length === 0;
-  
+
       const filter = stateQuestions.filter((item) => item === true);
       const _isQuestion = filter.length === 0;
-  
+
       setSubmit(_isSubmit);
       setQuestion(_isQuestion);
-  
+
       console.log("isSubmit (จาก stateError) ==> ", _isSubmit);
       console.log("isQuestion (จาก stateQuestions) ==> ", _isQuestion);
-  
+
       // ✅ ใช้ค่าที่คำนวณมาแล้วแทน state
       if (_isSubmit && _isQuestion) {
         console.log("_isSubmit && _isQuestion ==> ", _isSubmit && _isQuestion);
-  
+
         onOpen();
       }
     }
-    
   }, [stateError, stateQuestions]);
 
   // useEffect(() => {
@@ -866,6 +902,46 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
                 <h1 className="text-xl">แบบสอบถาม</h1>
               </CardHeader>
               <CardBody>
+              {/* <p className="text-small text-default-500">Selected: {Array.from(selectQuestions).join(", ")}</p> */}
+              <Select
+                  className="w-full mb-3"
+                  label="เลือกแผนก"
+                  selectedKeys={selectQuestions}
+                  placeholder="เลือกแผนก"
+                  selectionMode="multiple"
+                  onSelectionChange={handleSelectionQuestionChange}
+                  onOpenChange={setOpenQuestion}
+
+                  renderValue={(items: SelectedItems<any>) => {
+                    return (
+                      <div className="flex flex-wrap gap-2">
+                       
+                      {items.map((select: any, index) => {
+                        const children = select.props?.children;
+                        
+                        return (
+                          <Chip key={index} color="primary">
+                            {precisBranch[children]}
+                          </Chip>
+                        );
+                      })}
+                    </div>
+                    );
+                  }}
+                >
+                  
+                  {[
+                    <SelectItem key={"none"}>
+                      ไม่ต้องการเลือกแผนก
+                    </SelectItem>,
+                    ...questions.map((question) => (
+                      <SelectItem key={question.id}>
+                        {question.question}
+                      </SelectItem>
+                    ))
+                  ]}
+
+                </Select> 
                 <Questions selected={selected} setSelected={setSelected} />
               </CardBody>
               {/* <pre>{JSON.stringify(selected, null, 2)}</pre> */}
@@ -907,7 +983,7 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
             type="submit"
 
             // onPress={()=> {
-            //   console.log(isSubmit,isQuestion)
+            //   //console.log(isSubmit,isQuestion)
             //   if(isSubmit && isQuestion){
             //     onOpen();
             //   }
@@ -932,123 +1008,187 @@ const [statusSubmit,setStatusSubmit] = React.useState<boolean>(false)
                   </ModalHeader>
                   <p className="px-4" />
                   <ModalBody className="">
-  {Array.isArray(courses) &&
-    paginatedCourses.map((item: any, index: number) => (
-   
-      <div key={index} className="gap-4">
-       
-        {/* 🔹 วนลูป IT Infrastructure Services (Array) */}
-        {Object.keys(item)
-  .filter((key) => key != "recommandList") // ❌ เอา Recommended ออกจากการลูปนี้
-  .map((category, idx) => {
-  console.log("category ==> ", category);
-    const categoryData = item[category];
-    const isEmptyArray = Array.isArray(categoryData) && categoryData.length === 0;
-    const isEmptyObject = typeof categoryData === "object" && categoryData !== null && Object.keys(categoryData).length === 0;
+                    {Array.isArray(courses) &&
+                      paginatedCourses.map((item: any, index: number) => (
+                        <div key={index} className="gap-4">
+                          {/* 🔹 วนลูป IT Infrastructure Services (Array) */}
+                          {Object.keys(item)
+                            .filter((key) => key != "recommandList") // ❌ เอา Recommended ออกจากการลูปนี้
+                            .map((category, idx) => {
+                              //console.log("category ==> ", category);
+                              const categoryData = item[category];
+                              const isEmptyArray =
+                                Array.isArray(categoryData) &&
+                                categoryData.length === 0;
+                              const isEmptyObject =
+                                typeof categoryData === "object" &&
+                                categoryData !== null &&
+                                Object.keys(categoryData).length === 0;
 
-    return (
-      <div key={idx}>
-        <h2 className="text-xl font-bold mb-2">
-          {category === "softSkill"
-            ? "ทักษะทางสังคมที่ใช้เพื่อปฏิสัมพันธ์กับผู้คน"
-            : category}
-        </h2>
+                              return (
+                                <div key={idx}>
+                                  <h2 className="text-xl font-bold mb-2">
+                                    {category === "softSkill"
+                                      ? "ทักษะทางสังคมที่ใช้เพื่อปฏิสัมพันธ์กับผู้คน"
+                                      : category}
+                                  </h2>
 
-        {isEmptyArray || isEmptyObject ? (
-          <p className="text-gray-500 my-4">ไม่พบหลักสูตรที่แนะนำ</p>
-        ) : Array.isArray(categoryData) ? (
-          categoryData.map((course: any, courseIdx: number) => (
-            <Card key={courseIdx} className="py-4 my-4">
-              <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                <h1 className="text-default-800 text-lx font-bold">{course.label}</h1>
-              </CardHeader>
-              <CardBody>
-                <ul className="list-disc pl-5">
-                  {(course.detail ?? []).map((detail: string, detailIdx: number) => (
-                    <li key={detailIdx}>{detail}</li>
-                  ))}
-                </ul>
-                <p className="text-sm font-light my-2">{course.reason}</p>
-                <p className="text-sm text-gray-500">{course.noti}</p>
-                <div className="w-full flex justify-end gap-3">
-                  <Chip color="primary">{course.location}</Chip>
-                  <Chip color="primary">{course.time}</Chip>
-                  {course.recommend ? (
-                    <Chip color="secondary">หลักสูตรที่เกี่ยวข้อง</Chip>
-                  ) : (
-                    <Chip color="success" className="text-sky-50">หลักสูตรแนะนำ</Chip>
-                  )}
-                </div>
-              </CardBody>
-            </Card>
-          ))
-        ) : (
-          Object.keys(categoryData).map((subCategory, subIdx) => {
-            const course = categoryData[subCategory];
-            return (
-              <Card key={subIdx} className="py-4 my-2">
-                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                  <h1 className="text-default-800 font-bold">{subCategory}</h1>
-                </CardHeader>
-                <CardBody>
-                  <ul className="list-disc pl-5">
-                    {(course.detail ?? []).map((detail: string, detailIdx: number) => (
-                      <li key={detailIdx}>{detail}</li>
-                    ))}
-                  </ul>
-                  <p className="text-sm font-light my-2">{course.reason}</p>
-                  <p className="text-sm text-gray-500">{course.noti}</p>
-                  <div className="w-full flex justify-end gap-3">
-                    <Chip color="primary">{course.location}</Chip>
-                    <Chip color="primary">{course.time}</Chip>
-                  </div>
-                </CardBody>
-              </Card>
-            );
-          })
-        )}
+                                  {isEmptyArray || isEmptyObject ? (
+                                    <p className="text-gray-500 my-4">
+                                      ไม่พบหลักสูตรที่แนะนำ
+                                    </p>
+                                  ) : Array.isArray(categoryData) ? (
+                                    categoryData.map(
+                                      (course: any, courseIdx: number) => (
+                                        <Card
+                                          key={courseIdx}
+                                          className="py-4 my-4"
+                                        >
+                                          <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                                            <h1 className="text-default-800 text-lx font-bold">
+                                              {course.label}
+                                            </h1>
+                                          </CardHeader>
+                                          <CardBody>
+                                            <ul className="list-disc pl-5">
+                                              {(course.detail ?? []).map(
+                                                (
+                                                  detail: string,
+                                                  detailIdx: number
+                                                ) => (
+                                                  <li key={detailIdx}>
+                                                    {detail}
+                                                  </li>
+                                                )
+                                              )}
+                                            </ul>
+                                            <p className="text-sm font-light my-2">
+                                              {course.reason}
+                                            </p>
+                                            <p className="text-sm text-gray-500">
+                                              {course.noti}
+                                            </p>
+                                            <div className="w-full flex justify-end gap-3">
+                                              <Chip color="primary">
+                                                {course.location}
+                                              </Chip>
+                                              <Chip color="primary">
+                                                {course.time}
+                                              </Chip>
+                                              {course.recommend ? (
+                                                <Chip color="secondary">
+                                                  หลักสูตรที่เกี่ยวข้อง
+                                                </Chip>
+                                              ) : (
+                                                <Chip
+                                                  color="success"
+                                                  className="text-sky-50"
+                                                >
+                                                  หลักสูตรแนะนำ
+                                                </Chip>
+                                              )}
+                                            </div>
+                                          </CardBody>
+                                        </Card>
+                                      )
+                                    )
+                                  ) : (
+                                    Object.keys(categoryData).map(
+                                      (subCategory, subIdx) => {
+                                        const course =
+                                          categoryData[subCategory];
+                                        return (
+                                          <Card
+                                            key={subIdx}
+                                            className="py-4 my-2"
+                                          >
+                                            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                                              <h1 className="text-default-800 font-bold">
+                                                {subCategory}
+                                              </h1>
+                                            </CardHeader>
+                                            <CardBody>
+                                              <ul className="list-disc pl-5">
+                                                {(course.detail ?? []).map(
+                                                  (
+                                                    detail: string,
+                                                    detailIdx: number
+                                                  ) => (
+                                                    <li key={detailIdx}>
+                                                      {detail}
+                                                    </li>
+                                                  )
+                                                )}
+                                              </ul>
+                                              <p className="text-sm font-light my-2">
+                                                {course.reason}
+                                              </p>
+                                              <p className="text-sm text-gray-500">
+                                                {course.noti}
+                                              </p>
+                                              <div className="w-full flex justify-end gap-3">
+                                                <Chip color="primary">
+                                                  {course.location}
+                                                </Chip>
+                                                <Chip color="primary">
+                                                  {course.time}
+                                                </Chip>
+                                              </div>
+                                            </CardBody>
+                                          </Card>
+                                        );
+                                      }
+                                    )
+                                  )}
 
-        {/* แสดงเฉพาะ Recommended แบบแยกโครงสร้างออกมาเลย */}
+                                  {/* แสดงเฉพาะ Recommended แบบแยกโครงสร้างออกมาเลย */}
+                                </div>
+                              );
+                            })}
 
-
-      </div>
-      
-    );
-  })}
-
-
-
-{item.recommandList && item.recommandList.length > 0 && (
-  <div className="mt-5">
-    <h2 className="text-xl font-bold mb-2">หลักสูตรเสริมทักษะ</h2>
-    {item.recommandList.map((course: any, idx: number) => (
-      <Card key={idx} className="py-4 my-4">
-        <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-          <h1 className="text-default-800 text-lx font-bold">{course.name}</h1>
-        </CardHeader>
-        <CardBody>
-          <ul className="list-disc pl-5">
-            {(course.description ?? []).map((desc: string, i: number) => (
-              <li key={i}>{desc}</li>
-            ))}
-          </ul>
-          <p className="text-sm font-light my-2">
-            <strong>หลักสูตรเสริมทักษะ:</strong> {course.courseList}
-          </p>
-          <div className="w-full flex justify-end">
-            <Chip color="success" className="text-sky-50">หลักสูตรเสริมทักษะ</Chip>
-          </div>
-        </CardBody>
-      </Card>
-    ))}
-  </div>
-)}
-
-      </div>
-
-      
-    ))}
-</ModalBody>
+                          {item.recommandList &&
+                            item.recommandList.length > 0 && (
+                              <div className="mt-5">
+                                <h2 className="text-xl font-bold mb-2">
+                                  หลักสูตรเสริมทักษะ
+                                </h2>
+                                {item.recommandList.map(
+                                  (course: any, idx: number) => (
+                                    <Card key={idx} className="py-4 my-4">
+                                      <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                                        <h1 className="text-default-800 text-lx font-bold">
+                                          {course.name}
+                                        </h1>
+                                      </CardHeader>
+                                      <CardBody>
+                                        <ul className="list-disc pl-5">
+                                          {(course.description ?? []).map(
+                                            (desc: string, i: number) => (
+                                              <li key={i}>{desc}</li>
+                                            )
+                                          )}
+                                        </ul>
+                                        <p className="text-sm font-light my-2">
+                                          <strong>หลักสูตรเสริมทักษะ:</strong>{" "}
+                                          {course.courseList}
+                                        </p>
+                                        <div className="w-full flex justify-end">
+                                          <Chip
+                                            color="success"
+                                            className="text-sky-50"
+                                          >
+                                            หลักสูตรเสริมทักษะ
+                                          </Chip>
+                                        </div>
+                                      </CardBody>
+                                    </Card>
+                                  )
+                                )}
+                              </div>
+                            )}
+                        </div>
+                      ))}
+                  </ModalBody>
 
                   <ModalFooter>
                     <Pagination

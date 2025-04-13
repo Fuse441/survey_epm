@@ -7,6 +7,8 @@ import { Accordion, AccordionItem } from "@heroui/accordion";
 import { questions } from "@/config/questions";
 import { stateQuestionsError } from "@/config/stateQuestions"
 import { exclusiveOptions } from "@/config/exclusiveOptions";
+import { useQuestion } from "@/hooks/useQuestion";
+
 type QuestionsProps = {
   selected: { [key: string]: string | string[] };
   setSelected: React.Dispatch<
@@ -15,21 +17,26 @@ type QuestionsProps = {
 };
 
 const handleAccordionChange = (index: number) => {
-  // console.log("index ==> ", index);
+  // //console.log("index ==> ", index);
   
   const targetSection = document.getElementById(`session-${index}`);
   
   if (targetSection) {
-  // console.log("targetSection ==> ", targetSection);
+  // //console.log("targetSection ==> ", targetSection);
     targetSection.scrollIntoView({ behavior: "smooth", block: "end" });
   }
 };
 
-
 export default function Questions({ selected, setSelected }: QuestionsProps) {
+  const { selectQuestions, setQuestions } = useQuestion(); 
+
   return (
+    <>
+      {/* <p className="text-small text-default-500">Selected: {Array.from(selectQuestions)}</p> */}
+            
     <Accordion  isCompact id="main-questions">
-      {questions.map((item, index) => (
+    
+      {questions.filter((item:any) => Array.from(selectQuestions).includes(item.id)).map((item, index) => (
         <AccordionItem
          id={`session-${index}`}
           onClick={() => handleAccordionChange(index)}
@@ -96,7 +103,7 @@ export default function Questions({ selected, setSelected }: QuestionsProps) {
 
                         
                         if (selectedValue) {
-                        console.log("selectedValue ==> ", selectedValue);
+                        //console.log("selectedValue ==> ", selectedValue);
                           setSelected((prev) => ({
                             ...prev,
                             [key]: [selectedValue],
@@ -147,5 +154,6 @@ export default function Questions({ selected, setSelected }: QuestionsProps) {
         </AccordionItem>
       ))}
     </Accordion>
+    </>
   );
 }

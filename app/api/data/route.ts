@@ -41,7 +41,7 @@ export async function GET(request: Request) {
   if(size != "all"){
     query.size = size;
   }
-  console.log(query)
+  //console.log(query)
 
   try {
     const collection = await ConnectMongo("departmentSkills");

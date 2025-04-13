@@ -76,7 +76,7 @@ export const radar = (response: any) => {
     object.forEach((array: any) => {
    
       array.data.forEach((element: any) => {
-      // console.log("element ==> ", element);
+      // //console.log("element ==> ", element);
         const matchedDept = departments.find((dept) =>
           new RegExp(dept, "i").test(element.department),
         );
@@ -162,7 +162,7 @@ export const doughnut = (response: any) => {
 };
 
 export const tables = (response: any[]) => {
-  console.log("response ==> ", response);
+  //console.log("response ==> ", response);
 
   const departmentLabelMap: Record<string, string[]> = {};
 
@@ -182,7 +182,7 @@ export const tables = (response: any[]) => {
   const data: number[] = [];
   let result: Record<string, any>[] = [];
   Object.entries(departmentLabelMap).forEach(([dept, labelList]) => {
-  // console.log("dept ==> ", dept);
+  // //console.log("dept ==> ", dept);
     const countMap: Record<string, number> = {};
 
     labelList.forEach((label) => {
@@ -191,14 +191,14 @@ export const tables = (response: any[]) => {
 
     // หา label ที่มี count สูงสุด
     const topLabel = Object.entries(countMap).sort((a, b) => b[1] - a[1])[0];
-    // console.log("topLabel ==> ", topLabel);
+    // //console.log("topLabel ==> ", topLabel);
     if (topLabel) {
       result.push({department : dept,course : topLabel[0],score : topLabel[1]})
       // labels.push(topLabel[0]); // ชื่อหลักสูตร
       // data.push(topLabel[1]);   // จำนวนที่เจอ
     }
   });
-  console.log(result)
+  //console.log(result)
   return result
 };
 

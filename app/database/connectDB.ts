@@ -8,7 +8,7 @@ const dbName = 'epm';
 export async function ConnectMongo(collec:string) {
  
   await client.connect();
-  console.log('Connected successfully to server');
+  //console.log('Connected successfully to server');
   const db = client.db(dbName);
   const collection = db.collection(collec);
 
