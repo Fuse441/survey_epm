@@ -1224,8 +1224,8 @@ export default function Home() {
     onOpenChange: confirmDisclosure.onOpenChange,
   }}
   modal={{
-    title: "ยืนยันการบันทึก",
-    description: "คุณต้องการบันทึกข้อมูลนี้หรือไม่?",
+    title: "คุณต้องการยืนยันการส่งข้อมูลหรือไม่?",
+    description: "หากกดยืนยันแล้ว จะไม่สามารถกลับมาแก้ไขข้อมูลได้อีก กรุณาตรวจสอบข้อมูลให้เรียบร้อยก่อนกด 'ยืนยัน'",
     confirmText: "ยืนยัน",
     cancelText: "ยกเลิก",
     onConfirm: () => {
